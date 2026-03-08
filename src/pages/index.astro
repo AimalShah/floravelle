@@ -1,11 +1,16 @@
 ---
-import Welcome from '../components/Welcome.astro';
+import "../styles/global.css"
 import Layout from '../layouts/Layout.astro';
+import Hero from '../components/hero.astro'
+import Marquee from '../components/marquee.tsx'
+import PerfumesSection from '../components/perfumesSection.astro'
+import Moments from "../components/moments.astro"
 
-// Welcome to Astro! Wondering what to do next? Check out the Astro documentation at https://docs.astro.build
-// Don't want to use any of this? Delete everything in this file, the `assets`, `components`, and `layouts` directories, and start fresh.
 ---
 
 <Layout>
-	<Welcome />
+<Hero/>
+<Marquee  client:load/>
+<PerfumesSection/>
+<Moments/>
 </Layout>

@@ -1,0 +1,66 @@
+---
+
+import "../styles/global.css"
+import {Image} from "astro:assets"
+import manhaImg from "../assets/manha.png"
+import shadowImg from "../assets/shadow.png"
+import odyessyImg from "../assets/odyssey.png"
+
+const products = [
+  {
+    id: 1,
+    name: "manha",
+    src : manhaImg,
+    description: "fresh floral elegance"
+  },
+  {
+    id: 2,
+    name: "shadow",
+    src : shadowImg,
+    description: "dark woody mystery"
+  },
+  {
+    id: 3,
+    name: "odyessy",
+    src : odyessyImg,
+    description: "bold citrus adventure"
+  }
+];
+---
+
+
+<section class="font-primary mt-28">
+  <div class="container mx-auto flex">
+    <div>
+      <h1 class="text-7xl mb-8">Signature Scents</h1>
+      <p class="text-2xl text-gray-600 px-2">Find the fragrance that feels uniquely yours and lingers beautifully wherever you go.</p>
+    </div>
+    <div class="w-full flex items-end justify-end">
+      <a href="#" class="font-bold text-xl underline cursor-pointer">View All</a>
+    </div>
+  </div>
+  <div class="mt-12 w-full container mx-auto flex gap-18 ">
+    { products.map((product) => (
+
+    <div class="w-[28rem] h-[30rem] cursor-pointer group">
+      <div class="w-full overflow-hidden h-[25rem] bg-red-400">
+        <Image
+          src={product.src}
+          alt={product.name}
+          class="w-full object-cover group-hover:scale-110 transition-all duration-120"
+        />
+      </div>
+      <div class="flex justify-between  mt-4">
+        <div class='space-y-4'>
+          <h3 class="text-2xl font-semibold capitalize">{product.name}</h3>
+          <p class="text-gray-600 text-xl">{product.description}</p>
+        </div>
+        <div class="flex items-center">
+          <button class="text-xl font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full p-2 cursor-pointer">View Details</button>
+        </div>
+      </div>
+    </div> 
+    ))}
+  </div>
+</section>
+
