@@ -5,25 +5,25 @@ import bannerImg from "../assets/banner2.png"
 ---
 
 
-<section class="mt-18 space-y-18">
-  <div class="container mx-auto">
-    <h1 class="font-primary text-6xl text-center">Crafted with <span class="italic">Intention</span></h1>
+<section class="mt-12 md:mt-18 space-y-8 md:space-y-18">
+  <div class="container mx-auto px-4 md:px-0">
+    <h1 class="font-primary text-4xl md:text-6xl text-center">Crafted with <span class="italic">Intention</span></h1>
   </div>
 
-  <div class="container mx-auto flex gap-28 h-auto py-12">
-    <div class="w-full h-full bg-red-400 flex-1 mb-8">
+  <div class="container mx-auto flex flex-col md:flex-row gap-8 md:gap-28 h-auto py-8 md:py-12 px-4 md:px-0">
+    <div class="w-full h-[300px] md:h-auto bg-red-400 flex-1 mb-0 md:mb-8">
         <Image
         src={bannerImg}
         alt="banner"
-        calss="w-full h-full shadow"
+        class="w-full h-full object-cover shadow"
       />
     </div>
-    <div class="font-primary flex-1 text-2xl text-justify flex flex-col justify-center">
+    <div class="font-primary flex-1 text-xl md:text-2xl text-justify flex flex-col justify-center">
       <p class="text-[#A39579] mb-2">At FLORAVELLE, every fragrance begins with a purpose.</p>
-      <p class="leading-high">We believe fragrance is more than a scent — it is an expression of personality and emotion. Each composition is carefully crafted with refined notes and quality ingredients to create a timeless, distinctive experience that leaves a lasting impression.</p>
-    <div class="bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(196,176,124,1)_40%,rgba(208,192,150,1)_72%,rgba(255,255,255,0)_100%)] h-[2px] w-full mt-12"/>
-      <p class="text-2xl mt-16">
-        &quot; <span class="mt-2 text-[#A39579]">A fragrance is the silent</span> <br/> signature of your presence &quot;
+      <p class="leading-relaxed md:leading-high">We believe fragrance is more than a scent — it is an expression of personality and emotion. Each composition is carefully crafted with refined notes and quality ingredients to create a timeless, distinctive experience that leaves a lasting impression.</p>
+    <div class="bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(196,176,124,1)_40%,rgba(208,192,150,1)_72%,rgba(255,255,255,0)_100%)] h-[2px] w-full mt-8 md:mt-12"/>
+      <p class="text-xl md:text-2xl mt-8 md:mt-16 text-center md:text-left">
+        &quot; <span class="mt-2 text-[#A39579]">A fragrance is the silent</span> <br class="hidden md:block"/> signature of your presence &quot;
       </p>
     </div>
 

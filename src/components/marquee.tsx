@@ -23,8 +23,8 @@ export default function Marquee() {
       <div
         className="marquee-track flex whitespace-nowrap w-max"
       >
-        <span className="text-7xl font-primary font-thin text-nowrap mx-8">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦  PURE AROMAS ✦</span>
-        <span className="text-7xl font-primary font-thin text-nowrap">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦  PURE AROMAS ✦</span>
+        <span className="text-4xl md:text-7xl font-primary font-thin text-nowrap mx-4 md:mx-8">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
+        <span className="text-4xl md:text-7xl font-primary font-thin text-nowrap">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
       </div>
     </div>
   )
