@@ -7,11 +7,11 @@ import {Image} from "astro:assets"
 
 <header class="py-6">
   <div class="flex flex-col md:flex-row container mx-auto items-center justify-between font-primary px-4 md:px-0 gap-4 md:gap-0">
-    <h1 class="text-3xl md:text-4xl font-semibold">Floravelle</h1>
+    <a href="/" class="text-3xl md:text-4xl cursor-pointer font-semibold">Floravelle</a>
     <nav class="text-none text-lg md:text-xl text-[#090401] flex flex-wrap justify-center gap-4 md:gap-8 list-none font-semibold">
       <a class="cursor-pointer">Collection</a>
-      <a class="cursor-pointer">About Us</a>
-      <a class="cursor-pointer">Contact</a>
+      <a href="/about" class="cursor-pointer">About Us</a>
+      <a href="/contact" class="cursor-pointer">Contact</a>
     </nav>
   </div>
 </header>
