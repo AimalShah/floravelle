@@ -1,0 +1,222 @@
+---
+import Layout from "../../layouts/Layout.astro";
+import "../../styles/global.css";
+import { Image } from "astro:assets";
+import manhaImg from "../../assets/manha.png";
+import manha1Img from "../../assets/manha/manha-1.png";
+
+import shadowImg from "../../assets/shadow.png";
+import shadow1Img from "../../assets/shadow/shadow-1.png";
+import shadow2Img from "../../assets/shadow/shadow-2.png";
+
+import odyessyImg from "../../assets/odyssey.png";
+import od1Img from "../../assets/odyssey/od-1.png";
+import od2Img from "../../assets/odyssey/od-2.png";
+
+import mirageImg from "../../assets/mirage.png";
+import mirage1Img from "../../assets/mirage/mirage-1.png";
+import mirage2Img from "../../assets/mirage/mirage-2.png";
+import mirage4Img from "../../assets/mirage/mirag-4.png";
+
+export const prerender = false;
+const { product } = Astro.params;
+
+const productsData = {
+  mirage: {
+    name: "Mirage",
+    images: [mirageImg, mirage1Img, mirage2Img, mirage4Img],
+    subtitle: "Ethereal Desert Breeze",
+    price: "Rs. 2500",
+    description: "Mirage captures the essence of a hidden sanctuary. It's a scent that blurs the lines between reality and dream, offering a refreshing yet mysterious aura that evolves beautifully throughout the day.",
+    notes: {
+      top: "Pear Blossom",
+      heart: "White Gardenia, Jasmine",
+      base: "Brown sugar, Patchouli"
+    }
+  },
+  manha: {
+    name: "Manha",
+    images: [manhaImg, manha1Img],
+    subtitle: "Fresh Floral Elegance",
+    price: "Rs. 4,500",
+    description: "Manha is a delicate expression of femininity. It opens with bright, uplifting floral notes before settling into a soft, memorable embrace. Perfect for daytime wear and elegant evenings.",
+    notes: {
+      top: "Pear Blossom",
+      heart: "White Gardenia, Jasmine",
+      base: "Brown sugar, Patchouli"
+    }
+  },
+  shadow: {
+    name: "Shadow",
+    images: [shadowImg, shadow1Img, shadow2Img],
+    subtitle: "Dark Woody Mystery",
+    price: "Rs. 5,200",
+    description: "Shadow brings an alluring depth to your presence. Complex, woody, and intensely magnetic, it is crafted for those who leave a powerful, lingering impression.",
+    notes: {
+      top: "Spices, Cardamom, Black Pepper",
+      heart: "Oud, Leather, Patchouli",
+      base: "Amber, Vetiver, Dark Woods"
+    }
+  },
+  odyessy: {
+    name: "Odyessy",
+    images: [odyessyImg, od1Img, od2Img],
+    subtitle: "Bold Citrus Adventure",
+    price: "Rs. 4,800",
+    description: "A vibrant burst of energy. Odyessy combines zesty citrus with dynamic aromatic undertones, making it the perfect companion for the confident and the adventurous.",
+    notes: {
+      top: "Lemon, Grapefruit, Mint",
+      heart: "Ginger, Nutmeg, Pink Pepper",
+      base: "Cedarwood, Sandalwood, Moss"
+    }
+  }
+};
+
+const productSlug = product?.toLowerCase() || "";
+const productInfo = productsData[productSlug as keyof typeof productsData];
+
+if (!productInfo) {
+  return Astro.redirect('/404');
+}
+
+// WhatsApp ordering functionality
+const phoneNumber = "9233 1619295"; // Replace with actual WhatsApp number
+const message = `Hi FLORAVELLE! I'm interested in ordering the perfume: ${productInfo.name}.`;
+const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+---
+
+<Layout>
+  <section class="min-h-screen pt-24 pb-16 md:pt-32 font-primary">
+    <div class="container mx-auto px-4 md:px-8 max-w-7xl">
+      
+      <!-- Back Link -->
+      <a href="/#products" class="inline-flex items-center text-gray-500 hover:text-[#8A5633] transition-colors mb-8 md:mb-12 uppercase tracking-wider text-sm font-medium">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+        </svg>
+        Back to Collection
+      </a>
+
+      <div class="flex flex-col md:flex-row gap-12 lg:gap-24">
+        
+        <!-- Image Gallery (Left Side) -->
+        <div class="w-full md:w-1/2 flex flex-col gap-4">
+          <!-- Main Display -->
+          <div class="w-full bg-[#E8E4DE] p-2 md:p-12 h-[450px] md:h-[550px] lg:h-[650px] flex items-center justify-center relative shadow-sm group overflow-hidden">
+            <div class="absolute inset-0 bg-white/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"></div>
+            <img 
+              id="main-product-image"
+              src={productInfo.images[0].src} 
+              alt={`FLORAVELLE ${productInfo.name}`} 
+              class="w-[99%] md:w-[99%] h-full max-h-full object-contain drop-shadow-2xl transition-all duration-300 group-hover:scale-105"
+            />
+          </div>
+          
+          <!-- Thumbnails -->
+          {productInfo.images.length > 1 && (
+            <div class="flex gap-4 overflow-x-auto py-2 px-1 snap-x scrollbar-hide">
+              {productInfo.images.map((img, index) => (
+                <button 
+                  class={`thumbnail-btn flex-shrink-0 w-20 md:w-24 h-24 md:h-28 bg-[#E8E4DE] rounded shadow-sm border-2 ${index === 0 ? 'border-[#8A5633]' : 'border-transparent'} hover:border-[#8A5633] transition-all p-2 snap-center focus:outline-none`}
+                  data-image-src={img.src}
+                >
+                  <img src={img.src} alt={`${productInfo.name} view ${index + 1}`} class="w-full h-full object-contain" />
+                </button>
+              ))}
+            </div>
+          )}
+        </div>
+
+        <!-- Product Information (Right Side) -->
+        <div class="w-full md:w-1/2 flex flex-col justify-center">
+          
+          <h1 class="text-4xl md:text-5xl lg:text-7xl font-bold mb-2 capitalize text-gray-900">{productInfo.name}</h1>
+          <p class="text-[#A39579] text-xl md:text-2xl uppercase tracking-[0.2em] font-light mb-6 md:mb-10">{productInfo.subtitle}</p>
+          
+          <p class="text-2xl font-semibold text-gray-800 mb-8">{"Rs. 2500"}</p>
+          
+          <div class="w-full h-px bg-gray-200 mb-8"></div>
+          
+          <p class="text-gray-600 text-lg leading-relaxed mb-10 max-w-xl text-left md:text-left">
+            {productInfo.description}
+          </p>
+
+          <!-- Fragrance Notes -->
+          <div class="mb-12">
+            <h3 class="text-lg font-semibold uppercase tracking-wider text-gray-900 mb-6">Fragrance Profile</h3>
+            <div class="space-y-4 text-gray-700">
+              <div class="flex items-start">
+                <span class="w-24 font-medium text-gray-900">Top:</span>
+                <span class="flex-1">{productInfo.notes.top}</span>
+              </div>
+              <div class="flex items-start">
+                <span class="w-24 font-medium text-gray-900">Heart:</span>
+                <span class="flex-1">{productInfo.notes.heart}</span>
+              </div>
+              <div class="flex items-start">
+                <span class="w-24 font-medium text-gray-900">Base:</span>
+                <span class="flex-1">{productInfo.notes.base}</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Actions -->
+          <div class="mt-auto">
+            <a 
+              href={whatsappUrl} 
+              target="_blank" 
+              rel="noopener noreferrer"
+              class="w-full md:w-auto inline-flex items-center justify-center gap-3 bg-[#1A1A1A] hover:bg-[#8A5633] text-white py-4 px-6 md:px-10 text-lg font-medium transition-colors duration-300 uppercase tracking-widest shadow-lg"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              Order on WhatsApp
+            </a>
+            <p class="text-sm text-gray-500 mt-4 text-center md:text-left">Need assistance? <a href="/contact" class="underline hover:text-gray-800">Contact our concierge</a>.</p>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</Layout>
+
+<script>
+  // Setup interactivity for the image gallery
+  const setupGallery = () => {
+    const mainImage = document.getElementById('main-product-image') as HTMLImageElement;
+    const thumbnails = document.querySelectorAll('.thumbnail-btn');
+
+    if (mainImage && thumbnails.length > 0) {
+      thumbnails.forEach(thumb => {
+        thumb.addEventListener('click', () => {
+          // Update main image source
+          const newSrc = thumb.getAttribute('data-image-src');
+          if (newSrc && mainImage.src !== newSrc) {
+            // Simple fade effect
+            mainImage.style.opacity = '0';
+            setTimeout(() => {
+              mainImage.setAttribute('src', newSrc);
+              mainImage.style.opacity = '1';
+            }, 150);
+            
+            // Update active state on buttons
+            thumbnails.forEach(t => {
+              t.classList.remove('border-[#8A5633]');
+              t.classList.add('border-transparent');
+            });
+            thumb.classList.remove('border-transparent');
+            thumb.classList.add('border-[#8A5633]');
+          }
+        });
+      });
+    }
+  };
+
+  // Run on first load
+  setupGallery();
+  
+  // Also run when navigating with Astro View Transitions (if enabled)
+  document.addEventListener('astro:page-load', setupGallery);
+</script>

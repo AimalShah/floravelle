@@ -5,14 +5,150 @@ import Logo from "../assets/logo.jpeg"
 import {Image} from "astro:assets"
 ---
 
-<header class="py-6">
-  <div class="flex flex-col md:flex-row container mx-auto items-center justify-between font-primary px-4 md:px-0 gap-4 md:gap-0">
-    <a href="/" class="text-3xl md:text-4xl cursor-pointer font-semibold">Floravelle</a>
-    <nav class="text-none text-lg md:text-xl text-[#090401] flex flex-wrap justify-center gap-4 md:gap-8 list-none font-semibold">
-      <a class="cursor-pointer">Collection</a>
-      <a href="/about" class="cursor-pointer">About Us</a>
-      <a href="/contact" class="cursor-pointer">Contact</a>
+<header class="py-6 fixed top-0 left-0 w-full z-50 bg-[#F0EBE5]/80 backdrop-blur-md transition-all duration-300">
+  <div class="flex container mx-auto items-center justify-between font-primary px-4 md:px-8">
+    
+    <!-- Logo -->
+    <a href="/" class="text-3xl md:text-4xl cursor-pointer font-semibold z-[60] relative transition-colors duration-500 hover:text-[#8A5633]" id="header-logo">
+      Floravelle
+    </a>
+
+    <!-- Desktop Nav -->
+    <nav class="hidden md:flex items-center gap-8 list-none font-semibold text-lg uppercase tracking-widest">
+      <a href="/collection" class="cursor-pointer hover:text-[#8A5633] transition-colors duration-300">Collection</a>
+      <a href="/about" class="cursor-pointer hover:text-[#8A5633] transition-colors duration-300">About Us</a>
+      <a href="/contact" class="cursor-pointer hover:text-[#8A5633] transition-colors duration-300">Contact</a>
     </nav>
+
+    <!-- Hamburger Button -->
+    <button 
+      id="hamburger-btn" 
+      class="md:hidden flex flex-col items-end justify-center gap-1.5 w-10 h-10 z-[60] relative group focus:outline-none"
+      aria-label="Toggle Menu"
+    >
+      <span class="w-8 h-[2px] bg-[#090401] rounded-full transition-all duration-300 ease-out origin-center" id="line-top"></span>
+      <span class="w-6 h-[2px] bg-[#090401] rounded-full transition-all duration-300 ease-out" id="line-mid"></span>
+      <span class="w-8 h-[2px] bg-[#090401] rounded-full transition-all duration-300 ease-out origin-center" id="line-bot"></span>
+    </button>
+
+  </div>
+
+  <!-- Mobile Menu Overlay -->
+  <div 
+    id="mobile-menu" 
+    class="h-screen inset-0 bg-[#F0EBE5] z-50 hidden flex-col items-center justify-center pointer-events-none"
+  >
+    <nav class="flex flex-col items-center gap-8 text-center">
+      <a href="/collection" class="mobile-link text-4xl font-bold uppercase tracking-tighter hover:text-[#8A5633] transition-colors">Collection</a>
+      <a href="/about" class="mobile-link text-4xl font-bold uppercase tracking-tighter hover:text-[#8A5633] transition-colors">About Us</a>
+      <a href="/contact" class="mobile-link text-4xl font-bold uppercase tracking-tighter hover:text-[#8A5633] transition-colors">Contact</a>
+    </nav>
+    
+    <!-- Floating perfume names in background -->
+    <div class="absolute inset-0 -z-10 flex flex-col justify-between py-12 pointer-events-none opacity-5 select-none font-bold text-[10vw]">
+      <p class="animate-marquee-left">MANHA SHADOW MIRAGE</p>
+      <p class="animate-marquee-right self-end">ODYESSEY MIRAGE MANHA</p>
+    </div>
   </div>
 </header>
+
+<script>
+  import { gsap } from "gsap";
+
+  const setupNav = () => {
+    const btn = document.getElementById('hamburger-btn');
+    const menu = document.getElementById('mobile-menu');
+    const logo = document.getElementById('header-logo');
+    const links = document.querySelectorAll('.mobile-link');
+    const lineTop = document.getElementById('line-top');
+    const lineMid = document.getElementById('line-mid');
+    const lineBot = document.getElementById('line-bot');
+    
+    let isOpen = false;
+
+    const toggleMenu = () => {
+      isOpen = !isOpen;
+
+      if (isOpen) {
+        // OPEN MENU
+        menu?.classList.remove('hidden');
+        menu?.classList.add('flex');
+        
+        gsap.to(menu, {
+          opacity: 1,
+          duration: 0.6,
+          pointerEvents: 'auto',
+          ease: 'power4.out'
+        });
+
+        // Hamburger to X
+        gsap.to(lineTop, { y: 8, rotate: 45, duration: 0.4, ease: 'back.out' });
+        gsap.to(lineMid, { opacity: 0, scaleX: 0, duration: 0.2 });
+        gsap.to(lineBot, { y: -8, rotate: -45, duration: 0.4, ease: 'back.out' });
+        
+        // Link Animations
+        gsap.fromTo(links, 
+          { y: 50, opacity: 0 }, 
+          { y: 0, opacity: 1, duration: 0.6, stagger: 0.1, delay: 0.2, ease: 'power3.out' }
+        );
+
+        // Logo Change
+        logo?.classList.add('text-[#8A5633]');
+
+      } else {
+        // CLOSE MENU
+        gsap.to(menu, {
+          opacity: 0,
+          duration: 0.4,
+          pointerEvents: 'none',
+          onComplete: () => {
+            menu?.classList.add('hidden');
+            menu?.classList.remove('flex');
+          }
+        });
+
+        // X back to Hamburger
+        gsap.to(lineTop, { y: 0, rotate: 0, duration: 0.4, ease: 'power4.out' });
+        gsap.to(lineMid, { opacity: 1, scaleX: 1, duration: 0.3 });
+        gsap.to(lineBot, { y: 0, rotate: 0, duration: 0.4, ease: 'power4.out' });
+        
+        // Logo Reset
+        logo?.classList.remove('text-[#8A5633]');
+      }
+    };
+
+    btn?.addEventListener('click', toggleMenu);
+    
+    // Close on link click
+    links.forEach(link => {
+      link.addEventListener('click', () => {
+        if(isOpen) toggleMenu();
+      });
+    });
+  };
+
+  // Run on first load
+  setupNav();
+  
+  // Also run when navigating with Astro View Transitions (if enabled)
+  document.addEventListener('astro:page-load', setupNav);
+</script>
+
+<style>
+  .animate-marquee-left {
+    animation: marquee-l 20s linear infinite;
+  }
+  .animate-marquee-right {
+    animation: marquee-r 20s linear infinite;
+  }
+  @keyframes marquee-l {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+  @keyframes marquee-r {
+    from { transform: translateX(-50%); }
+    to { transform: translateX(0); }
+  }
+</style>
+
 

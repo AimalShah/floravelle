@@ -2,9 +2,9 @@
 
 import "../styles/global.css"
 import {Image} from "astro:assets"
-import manhaImg from "../assets/manha.png"
-import shadowImg from "../assets/shadow.png"
-import odyessyImg from "../assets/odyssey.png"
+import manhaImg from "../assets/manha/manha-1.png"
+import shadowImg from "../assets/shadow/shadow-2.png"
+import odyessyImg from "../assets/odyssey/od-1.png"
 
 const products = [
   {
@@ -36,7 +36,7 @@ const products = [
       <p class="text-lg md:text-2xl text-gray-600 md:px-2">Find the fragrance that feels uniquely yours and lingers beautifully wherever you go.</p>
     </div>
     <div class="w-full flex items-start md:items-end justify-start md:justify-end">
-      <a href="#" class="font-bold text-lg md:text-xl underline cursor-pointer">View All</a>
+      <a href="/collection" class="font-bold text-lg md:text-xl underline cursor-pointer">View All</a>
     </div>
   </div>
   <div class="mt-8 md:mt-12 w-full container mx-auto flex flex-col md:flex-row gap-8 md:gap-18 px-4 md:px-0">
@@ -56,7 +56,7 @@ const products = [
           <p class="text-gray-600 text-lg md:text-xl">{product.description}</p>
         </div>
         <div class="flex items-center">
-          <button class="text-base md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full p-2 cursor-pointer">View Details</button>
+          <a href={`/products/${product.name}`} class="text-base md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full p-2 cursor-pointer">View Details</a>
         </div>
       </div>
     </div> 
