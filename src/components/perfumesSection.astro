@@ -40,7 +40,7 @@ import {products} from "../utils/data.ts"
     <div id="carousel" class="flex md:flex-row flex-col gap-8 md:gap-18 transition-transform duration-300">
       { products.map((product) => (
       <div class="w-full md:w-[28rem] h-auto md:h-[30rem] cursor-pointer group flex-nowrap">
-        <div class="w-full overflow-hidden h-[20rem] md:h-[25rem] bg-red-400">
+        <div class="w-full overflow-hidden h-[20rem] md:h-[25rem]">
           <Image
             src={product.src}
             alt={product.name}
