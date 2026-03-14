@@ -23,7 +23,7 @@ const { product } = Astro.params;
 const productInfo = productsData[product];
 
 
-const phoneNumber = "9233 1619295"; // Replace with actual WhatsApp number
+const phoneNumber = "92333 1619295"; // Replace with actual WhatsApp number
 const message = `Hi FLORAVELLE! I'm interested in ordering the perfume: ${productInfo.name}.`;
 const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 ---

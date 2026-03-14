@@ -65,3 +65,31 @@ export const productsData = {
     }
   }
 };
+
+
+export const products = [
+  {
+    id: 1,
+    name: "manha",
+    src : manha1Img,
+    description: "fresh floral elegance"
+  },
+  {
+    id: 2,
+    name: "shadow",
+    src : shadow1Img,
+    description: "dark woody mystery"
+  },
+  {
+    id: 3,
+    name: "odyessy",
+    src : od1Img,
+    description: "bold citrus adventure"
+  },
+  {
+    id: 4,
+    name: "mirage",
+    src : mirage1Img,
+    description: "warm amber illusion"
+  }
+];
