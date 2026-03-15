@@ -1,0 +1,64 @@
+---
+import "../styles/global.css"
+---
+
+<div class="w-full font-roboto text-2xl flex gap-4 h-full items-end py-12">
+  <div class="flex flex-row gap-2 items-center number-item">
+    <span class="text-xl font-normal number">01</span>
+    <div class="w-20 h-[2px] hidden bg-white/40 rounded overflow-hidden pro-bar">
+      <div class="h-full bg-white rounded progress-fill w-0"></div>
+    </div>
+  </div>
+  <div class="flex flex-row gap-2 items-center number-item">
+    <span class="text-xl font-normal number">02</span>
+    <div class="w-20 h-[2px] hidden bg-white/40 rounded overflow-hidden pro-bar">
+      <div class="h-full bg-white rounded progress-fill w-0"></div>
+    </div>
+  </div>
+  <div class="flex flex-row gap-2 items-center number-item">
+    <span class="text-xl font-normal number">03</span>
+    <div class="w-20 h-[2px] hidden bg-white/40 rounded overflow-hidden  pro-bar">
+      <div class="h-full bg-white rounded progress-fill w-10"></div>
+    </div>
+  </div>
+</div>
+
+
+<script>
+import gsap from "gsap";
+
+const items = document.querySelectorAll(".number-item");
+
+function animateStep(index = 0) {
+  if (index >= items.length) return;
+
+  const number = items[index].querySelector(".number");
+  const fillBar = items[index].querySelector(".pro-bar");
+  const fill = items[index].querySelector(".progress-fill");
+
+  // Highlight active numbemt-2 r
+  number.classList.add("font-bold");
+  fillBar.classList.remove("hidden");
+  
+  gsap.from(fill,{
+    width:"0%",
+  })
+  // Animate fill
+  gsap.to(fill, {
+    width: "100%",
+    duration: 2,
+    ease: "power1.inOut",
+    onComplete: () => {
+      // Reset number style if needed
+      fillBar.classList.add("hidden");
+
+      if(index == 2) index = -1;
+      console.log(index);
+      animateStep(index + 1); // move to next number
+    },
+  });
+}
+
+// Start the animation
+animateStep();
+</script>

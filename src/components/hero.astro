@@ -1,6 +1,7 @@
 ---
 import "../styles/global.css"
 import heroBg from "../assets/hero-2.png"
+import CarouselCounter from "../components/carousel-counter.astro"
 ---
 
 <section id="hero" class="h-[100dvh] bg-cover md:bg-right-top bg-center relative" style={`background-image : url(${heroBg.src})`}>
@@ -18,7 +19,7 @@ import heroBg from "../assets/hero-2.png"
   <!--   </div> -->
   <!-- </div> -->
 
-  <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12  font-heading py-32">
+  <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12  font-heading pt-32">
     <div class="flex flex-1 md:flex-row flex-col justify-between w-full ">
       <div class="h-fit overflow-hidden flex items-center">
         <h1 class="md:text-[14rem] text-[5rem] translate-y-90 heading font-heading">Timeless</h1>
@@ -29,6 +30,7 @@ import heroBg from "../assets/hero-2.png"
       </div>
     </div>
     <div class="flex flex-1 justify-end items-center overflow-hidden ">
+      <CarouselCounter/>
       <h1 class="md:text-[14rem] text-[5rem]  text-right translate-y-96 heading">Fragrance</h1>
     </div>
   </div>
