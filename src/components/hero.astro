@@ -1,21 +1,65 @@
 ---
 import "../styles/global.css"
-import heroBg from "../assets/hero.png"
+import heroBg from "../assets/hero-2.png"
 ---
 
-<section class="h-[89vh] bg-cover md:bg-right-top bg-center relative" style={`background-image : url(${heroBg.src})`}>
-  <div class="absolute inset-0 bg-black/10 z-10"/>
-  <div class="container h-full mx-auto flex flex-col justify-center z-20 px-4 md:px-0">
-    <div class="font-primary space-y-4 max-w-4xl z-40">
-      <p class="text-xl md:text-2xl font-primary font-thin md:px-2">LUXURY & PREMIUM</p>
-      <h1 class="text-5xl md:text-8xl font-primary leading-tight">Designed for <br class="hidden md:block"/> Daily Elegence</h1>
-      <p class="text-lg md:text-xl mt-4 md:mt-8 md:px-2">Elegence isn't occasional - it's woven into everyday <br class="hidden md:block"/> moments that define your pressence.</p>
-      <button class="text-lg md:text-2xl border-2 font-semibold border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full px-6 py-3 md:p-4 mt-8 md:mt-18 cursor-pointer">
-        Find Your Signature
-      </button>
+<section id="hero" class="h-[100dvh] bg-cover md:bg-right-top bg-center relative" style={`background-image : url(${heroBg.src})`}>
+  <!-- <div class="absolute inset-0 bg-black/10 z-10"/> -->
+  <!-- <div class="container h-full mx-auto flex flex-col justify-center z-20 px-4 md:px-0"> -->
+  <!--   <div class="font-primary space-y-4 max-w-4xl text-white z-40"> -->
+  <!--     <p class="text-xl md:text-xl font-primary font-thin md:px-2">LUXURY & PREMIUM</p> -->
+  <!--     <h1 class="text-5xl md:text-7xl font-primary leading-tight">Designed for <br class="hidden md:block"/> Daily Elegence</h1> -->
+  <!--     <p class="text-lg md:text-xl mt-4 md:mt-8 md:px-2">Elegence isn't occasional - it's woven into everyday <br class="hidden md:block"/> moments that define your pressence.</p> -->
+  <!--     <button class="text-lg md:text-2xl border-2 font-semibold border-[#7A5633]  -->
+  <!--       text-[#8A5633]   -->
+  <!--       hover:bg-[#7A5633] hover:text-white rounded-full px-6 py-3 md:p-4 mt-8 md:mt-18 cursor-pointer"> -->
+  <!--       Find Your Signature -->
+  <!--     </button> -->
+  <!--   </div> -->
+  <!-- </div> -->
+
+  <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12  font-heading py-32">
+    <div class="flex flex-1 md:flex-row flex-col justify-between w-full ">
+      <div class="h-fit overflow-hidden flex items-center">
+        <h1 class="md:text-[14rem] text-[5rem] translate-y-90 heading font-heading">Timeless</h1>
+      </div>
+      <div class="flex flex-col gap-2 justify-center text-xs md:text-lg font-roboto translate-y-60 opacity-0 paragraph">
+        <p class="text-right md:text-left">Elegance isn't occasional — it is woven into the quiet rhythm<br/> of everyday moments, shaping the way you move through the<br/> world and defining a presence that lingers long after you leave.</p>
+          <a class="text-right underline cursor-pointer">EXPLORE THE COLLECTION</a>
+      </div>
+    </div>
+    <div class="flex flex-1 justify-end items-center overflow-hidden ">
+      <h1 class="md:text-[14rem] text-[5rem]  text-right translate-y-96 heading">Fragrance</h1>
     </div>
   </div>
 </section>
 
+<script>
+import {gsap} from "gsap";
+
+const animate = () => {
+  const headings = document.querySelectorAll(".heading");
+  const paragraph = document.querySelector(".paragraph");
+
+  headings.forEach((heading) => {
+    gsap.to(heading, {
+      y:0,
+      duration : 1.8,
+      ease : "power3.out"
+    });
+  })
+
+
+  gsap.to(paragraph,{
+    y:0,
+    opacity:1,
+    duration : 1.8,
+    ease : "power3.out"
+  });
+
+};
+
+animate();
+</script>
 
 

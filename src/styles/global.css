@@ -1,7 +1,13 @@
-@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Lora:wght@400..700&family=Playfair:ital,opsz,wght@0,5..1200,300..900;1,5..1200,300..900&family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
 @import "tailwindcss";
+
+@font-face {
+  font-family : "moonspace";
+  src : url("../assets/fonts/Moonscape.otf") format("opentype");
+}
 
 @theme {
   --font-primary : "Lora", serif;
-  --font-heading : "Playfair" ,serif;
+  --font-heading : "moonspace" ,serif;
+  --font-roboto : "Roboto", sans-serif;
 }
