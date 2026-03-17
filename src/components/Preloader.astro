@@ -1,0 +1,64 @@
+---
+// Preloader.astro
+import '../styles/global.css';
+---
+
+<div id="preloader" class="fixed inset-0 z-[9999] bg-[#F0EBE5] flex flex-col items-center justify-center overflow-hidden">
+  <div class="overflow-hidden">
+    <h1 id="preloader-text" class="text-6xl md:text-8xl font-heading text-[#7A5633] tracking-widest translate-y-[100%]">FLORAVELLE</h1>
+  </div>
+  <div class="mt-8 overflow-hidden">
+      <p id="preloader-sub" class="text-sm md:text-base font-roboto text-[#7A5633] tracking-widest uppercase opacity-0">Awakening the Senses</p>
+  </div>
+  <div class="absolute bottom-10 left-1/2 -translate-x-1/2 w-48 h-[1px] bg-[#7A5633]/20 overflow-hidden">
+      <div id="preloader-progress" class="h-full w-0 bg-[#7A5633]"></div>
+  </div>
+</div>
+
+<script>
+  import { gsap } from 'gsap';
+
+  const initPreloader = () => {
+    const tl = gsap.timeline({
+      onComplete: () => {
+        // Dispatch an event so other components (like Hero) know when to start
+        window.dispatchEvent(new CustomEvent('preloaderComplete'));
+        
+        // Remove preloader from DOM after animation completes to free up resources
+        const preloader = document.getElementById('preloader');
+        if (preloader) {
+            preloader.remove();
+        }
+      }
+    });
+
+    // 1. Reveal main text sliding up
+    tl.to('#preloader-text', {
+      y: '0%',
+      duration: 1.2,
+      ease: 'power3.out',
+    })
+    // 2. Fade in subtitle
+    .to('#preloader-sub', {
+      opacity: 1,
+      duration: 0.8,
+      ease: 'power2.out',
+    }, '-=0.6')
+    // 3. Animate progress bar (simulating load)
+    .to('#preloader-progress', {
+      width: '100%',
+      duration: 1.5,
+      ease: 'power2.inOut',
+    }, '-=0.8')
+    // 4. Fade everything out and scale slightly for elegant exit
+    .to('#preloader', {
+      y: '-100%',
+      duration: 1.2,
+      ease: 'power4.inOut',
+      delay: 0.4
+    });
+  };
+
+  // Run immediately on client side
+  initPreloader();
+</script>

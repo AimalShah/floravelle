@@ -2,6 +2,7 @@
 import Header from "../components/header.astro"
 import TransparentHeader from "../components/transparent-header.astro"
 import Footer from "../components/footer.astro"
+import Preloader from "../components/Preloader.astro"
 ---
 
 <!doctype html>
@@ -11,8 +12,20 @@ import Footer from "../components/footer.astro"
 		<meta name="viewport" content="width=device-width" />
 		<meta name="generator" content={Astro.generator} />
 		<title>FloraVelle</title>
+		<script is:inline>
+			// Run immediately on page load before render
+			if (history.scrollRestoration) {
+				history.scrollRestoration = 'manual';
+			}
+			window.scrollTo(0, 0);
+			// Force scroll to top right before the page unloads/refreshes
+			window.addEventListener('beforeunload', () => {
+				window.scrollTo(0, 0);
+			});
+		</script>
 	</head>
 	<body>
+		<Preloader/>
    	<Header/>
 		<TransparentHeader/>
 		<slot />
@@ -29,3 +42,44 @@ import Footer from "../components/footer.astro"
 		height: 100%;
 	}
 </style>
+
+<script>
+	import { gsap } from "gsap";
+	import { ScrollTrigger } from "gsap/ScrollTrigger";
+
+	gsap.registerPlugin(ScrollTrigger);
+
+	// Setup a timeline or simple animation for elements with a "fade-up" class
+	// For instance, any child section in <Layout> can contain elements we want to fade.
+	// As we process components next, we will add '.reveal-element' to things we want animated.
+
+	const initScrollAnimations = () => {
+		const revealElements = document.querySelectorAll('.reveal-section');
+
+		revealElements.forEach((el) => {
+			gsap.fromTo(el, 
+				{ opacity: 0, y: 50 }, 
+				{
+					opacity: 1,
+					y: 0,
+					duration: 1.2,
+					ease: "power3.out",
+					scrollTrigger: {
+						trigger: el,
+						start: "top 80%", // Animates when top of element hits 80% down viewport
+						toggleActions: "play none none none" // only play once
+					}
+				}
+			);
+		});
+	};
+
+	// We can initialize right away, as scroll triggers will bind correctly 
+	// based on the DOM structure.
+	initScrollAnimations();
+	
+	// Handle page transitions / framework reloads if necessary
+	document.addEventListener('astro:page-load', () => {
+		initScrollAnimations();
+	});
+</script>

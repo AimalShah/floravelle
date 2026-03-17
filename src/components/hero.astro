@@ -25,7 +25,7 @@ import CarouselCounter from "../components/carousel-counter.astro"
         <h1 class="md:text-[14rem] text-[5rem] translate-y-90 heading font-heading">Timeless</h1>
       </div>
       <div class="flex flex-col gap-2 justify-center text-xs md:text-lg font-roboto translate-y-60 opacity-0 paragraph">
-        <p class="text-right md:text-left">Elegance isn't occasional — it is woven into the quiet rhythm<br/> of everyday moments, shaping the way you move through the<br/> world and defining a presence that lingers long after you leave.</p>
+        <p class="text-right md:text-left">Elegance isn't occasional — it is woven into the quiet rhythm<br class="md:block hidden"/> of everyday moments, shaping the way you move through the<br class="md:block hidden"/> world and defining a presence that lingers long after you leave.</p>
           <a class="text-right underline cursor-pointer">EXPLORE THE COLLECTION</a>
       </div>
     </div>
@@ -39,6 +39,7 @@ import CarouselCounter from "../components/carousel-counter.astro"
 import {gsap} from "gsap";
 
 const animate = () => {
+  const hero = document.querySelector(".hero")
   const headings = document.querySelectorAll(".heading");
   const paragraph = document.querySelector(".paragraph");
 
@@ -60,7 +61,18 @@ const animate = () => {
 
 };
 
-animate();
+// Wait for the custom preloader event before starting the animation
+window.addEventListener('preloaderComplete', () => {
+  animate();
+});
+
+// Fallback in case preloader is missing or already completed
+setTimeout(() => {
+	const preloader = document.getElementById('preloader');
+	if (!preloader && !window.hasOwnProperty('preloaderAnimated')) {
+		animate();
+	}
+}, 3000);
 </script>
 
 
