@@ -3,7 +3,7 @@ import "../styles/global.css"
 ---
 
 
-<header class="absolute top-0 w-full bg-transparent font-roboto flex items-center  z-50   border-white py-8">
+<header class=" t-header | absolute top-[-18%] w-full bg-transparent font-roboto flex items-center  z-50   border-white py-8 opacity-0">
 
   <div class="container mx-auto flex justify-between md:px-0 px-8">
     <a class="md:text-3xl text-xl cursor-pointer text-white font-bold">Floravelle</a>
@@ -19,3 +19,21 @@ import "../styles/global.css"
   </div>
 
 </header>
+
+<script>
+import {gsap} from "gsap";
+
+const animateHeader = () => {
+  const header = document.querySelector(".t-header");
+
+  gsap.to(header, {
+    top : 0,
+    opacity :1,
+    duration :1.2,
+    ease : "none"
+  })
+}
+
+animateHeader()
+
+</script>

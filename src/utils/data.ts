@@ -1,6 +1,6 @@
 
 import manhaImg from "../assets/manha.png";
-import manha1Img from "../assets/manha/manha-1.png";
+import manha1Img from "../assets/manha/manha-flower.png";
 
 import shadowImg from "../assets/shadow.png";
 import shadow1Img from "../assets/shadow/shadow-1.png";
