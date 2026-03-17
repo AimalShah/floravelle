@@ -1,0 +1,197 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { productsData } from '../utils/data';
+import { Image } from 'astro:assets';
+import bannerImg from '../assets/banner-4.jpeg'; // Re-using atmospheric image for hero
+
+// Convert object to array for mapping
+const products = Object.entries(productsData).map(([id, data]) => ({ id, ...data }));
+---
+
+<Layout>
+  <!-- Beautiful Hero for Collection -->
+  <section class="h-[70vh] md:h-[80vh] relative flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0 select-none">
+      <Image 
+        src={bannerImg} 
+        alt="Collection Atmosphere" 
+        class="w-full h-full object-cover"
+        inferSize={true}
+      />
+      <div class="absolute inset-0 bg-black/40 "></div>
+    </div>
+    <div class="z-10 text-center font-primary space-y-6 pt-24 px-4 hidden"> <!-- Hidden initially by GSAP if we wanted, but let preloader handle reveal -->
+      <h1 class="text-5xl md:text-8xl font-heading text-white tracking-widest uppercase">The Collection</h1>
+      <p class="text-lg md:text-2xl text-white max-w-2xl mx-auto font-roboto tracking-wide">
+        Explore our curated selection of signature scents, each thoughtfully crafted to evoke deep emotion and leave a lasting impression.
+      </p>
+    </div>
+    <div class="z-10 text-center font-primary space-y-6 pt-24 px-4 translate-y-16 opacity-0" id="collection-hero-text">
+        <h1 class="text-5xl md:text-8xl font-heading text-white tracking-widest uppercase">The Collection</h1>
+      <p class="text-lg md:text-xl text-white/80 8A5633] max-w-2xl mx-auto font-roboto tracking-wide leading-relaxed">
+          Explore our curated selection of signature scents, each thoughtfully crafted to evoke deep emotion and leave a lasting impression.
+        </p>
+    </div>
+  </section>
+
+  <!-- Products Grid (Alternating Layout) -->
+  <div class="container mx-auto px-4 md:px-8 py-16 md:py-32 space-y-24 md:space-y-48">
+    {products.map((product, index) => {
+      const isEven = index % 2 !== 0; // Alternating logic
+
+      return (
+        <section class="reveal-section flex flex-col md:flex-row items-center gap-12 md:gap-24 group">
+          
+          {/* Image Carousel Block */}
+          <div class={`w-full md:w-1/2 overflow-hidden bg-[#E8E4DE] rounded-sm relative aspect-[4/5] ${isEven ? 'md:order-2' : 'md:order-1'}`}>
+            <div class={`carousel-track flex h-full w-[${product.images.length * 100}%] transition-transform duration-500`} data-product-id={product.id}>
+              {product.images.map((img, i) => (
+                <div class="w-full h-full flex-shrink-0 flex items-center justify-center p-8 md:p-16">
+                  <Image 
+                    src={img} 
+                    alt={`${product.name} view ${i + 1}`} 
+                    class="w-full h-full object-contain mix-blend-multiply"
+                    inferSize={true}
+                  />
+                </div>
+              ))}
+            </div>
+
+            {/* Carousel Controls */}
+            {product.images.length > 1 && (
+              <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex items-center gap-4 z-10 bg-white/50 backdrop-blur-sm px-4 py-2 rounded-full shadow-sm">
+                <button class="carousel-prev w-8 h-8 flex justify-center items-center text-xl text-[#7A5633] hover:bg-[#7A5633] hover:text-white rounded-full transition-colors" data-product-id={product.id} data-total={product.images.length}>
+                  ←
+                </button>
+                <div class="carousel-indicators flex gap-2">
+                  {product.images.map((_, i) => (
+                     <span class={`indicator w-2 h-2 rounded-full ${i===0 ? 'bg-[#7A5633]' : 'bg-[#A39579]/50'}`} data-product-id={product.id} data-index={i}></span>
+                  ))}
+                </div>
+                <button class="carousel-next w-8 h-8 flex justify-center items-center text-xl text-[#7A5633] hover:bg-[#7A5633] hover:text-white rounded-full transition-colors" data-product-id={product.id} data-total={product.images.length}>
+                  →
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Text/Details Block */}
+          <div class={`w-full md:w-1/2 font-primary flex flex-col justify-center space-y-8 ${isEven ? 'md:order-1' : 'md:order-2'}`}>
+            <div>
+              <p class="text-[#A39579] tracking-[0.2em] text-sm md:text-base uppercase mb-2">{product.subtitle}</p>
+              <h2 class="text-5xl md:text-7xl font-heading text-[#3B2D20] capitalize">{product.name}</h2>
+            </div>
+            
+            <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-xl">
+              {product.description}
+            </p>
+
+            {/* Fragrance Notes */}
+            <div class="space-y-3 pt-6 border-t border-[#A39579]/30 max-w-md">
+              <div class="flex justify-between text-sm md:text-base">
+                <span class="text-[#A39579] uppercase tracking-wider w-24">Top</span>
+                <span class="text-gray-800 flex-1 text-right">{product.notes.top}</span>
+              </div>
+              <div class="flex justify-between text-sm md:text-base">
+                <span class="text-[#A39579] uppercase tracking-wider w-24">Heart</span>
+                <span class="text-gray-800 flex-1 text-right">{product.notes.heart}</span>
+              </div>
+              <div class="flex justify-between text-sm md:text-base">
+                <span class="text-[#A39579] uppercase tracking-wider w-24">Base</span>
+                <span class="text-gray-800 flex-1 text-right">{product.notes.base}</span>
+              </div>
+            </div>
+
+            <div class="pt-8 flex items-center gap-6">
+              <span class="text-2xl md:text-3xl text-[#3B2D20]">{"Rs. 2500"}</span>
+              <a href={`/products/${product.id}`} class="inline-block text-lg font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full px-8 py-3 transition-colors duration-300 shadow-sm">
+                Discover
+              </a>
+            </div>
+          </div>
+        </section>
+      );
+    })}
+  </div>
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+
+  // Simple custom entrance for the Collection Hero
+  const animateHero = () => {
+    gsap.to('#collection-hero-text', {
+      y: 0,
+      opacity: 1,
+      duration: 1.5,
+      ease: "power3.out",
+    });
+  };
+
+  // Sync with preloader just like the main homepage hero
+  window.addEventListener('preloaderComplete', animateHero);
+
+  // Fallback in case preloader is missing (hot reloads)
+  setTimeout(() => {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) {
+      animateHero();
+    }
+  }, 1000);
+
+  // --- CAROUSEL LOGIC ---
+  const state = {}; // Track active index per product id
+
+  const updateCarousel = (productId, nextIndex, total) => {
+    state[productId] = nextIndex;
+    
+    // Animate track
+    const track = document.querySelector(`.carousel-track[data-product-id="${productId}"]`);
+    if(track) {
+      gsap.to(track, {
+        x: `-${nextIndex * 100}%`,
+        duration: 0.5,
+        ease: "power2.inOut"
+      });
+    }
+
+    // Update indicators
+    const indicators = document.querySelectorAll(`.indicator[data-product-id="${productId}"]`);
+    indicators.forEach((ind, i) => {
+      if(i === nextIndex) {
+        ind.classList.replace('bg-[#A39579]/50', 'bg-[#7A5633]');
+      } else {
+        ind.classList.replace('bg-[#7A5633]', 'bg-[#A39579]/50');
+      }
+    });
+  }
+
+  const nextBtns = document.querySelectorAll('.carousel-next');
+  nextBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const productId = btn.getAttribute('data-product-id');
+      const total = parseInt(btn.getAttribute('data-total'), 10);
+      let currentIndex = state[productId] || 0;
+      
+      let nextIndex = currentIndex + 1;
+      if (nextIndex >= total) nextIndex = 0; // wrap around
+      
+      updateCarousel(productId, nextIndex, total);
+    });
+  });
+
+  const prevBtns = document.querySelectorAll('.carousel-prev');
+  prevBtns.forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const productId = btn.getAttribute('data-product-id');
+      const total = parseInt(btn.getAttribute('data-total'), 10);
+      let currentIndex = state[productId] || 0;
+      
+      let nextIndex = currentIndex - 1;
+      if (nextIndex < 0) nextIndex = total - 1; // wrap around
+      
+      updateCarousel(productId, nextIndex, total);
+    });
+  });
+
+</script>

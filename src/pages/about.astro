@@ -1,38 +1,96 @@
 ---
 import Layout from "../layouts/Layout.astro"
+import { Image } from "astro:assets"
+import bannerImg from "../assets/banner2.png" 
 import "../styles/global.css"
 ---
 
 <Layout>
-  <section class="mt-12 md:mt-20 mb-20 space-y-8 md:space-y-18">
-    <div class="container mx-auto px-4 md:px-0 text-center">
-      <h1 class="font-primary text-4xl md:text-6xl text-center mb-4">About <span class="italic text-[#8A5633]">FLORAVELLE</span></h1>
-      <p class="text-lg md:text-xl font-primary font-thin text-[#A39579] tracking-widest uppercase">Elegance in Every Drop</p>
+  <!-- Atmospheric Hero Section -->
+  <section class="h-[60vh] md:h-[70vh] relative flex items-center justify-center overflow-hidden">
+    <div class="absolute inset-0 z-0">
+      <Image 
+        src={bannerImg} 
+        alt="Atmospheric concept" 
+        class="w-full h-full object-cover opacity-90 scale-105 parallax-bg"
+        inferSize={true}
+      />
+      <!-- Soft gradient overlay -->
+      <div class="absolute inset-0 bg-gradient-to-t from-[#F0EBE5] via-transparent to-black/50"></div>
     </div>
-
-    <div class="container mx-auto mt-12 md:mt-18 px-4 md:px-0">
-      <div class="bg-[#E8E4DE] p-8 md:p-14 lg:p-20 shadow-sm flex flex-col gap-8 md:gap-12 items-center text-center">
-        
-        <p class="font-primary text-xl md:text-2xl lg:text-3xl text-justify md:text-center leading-relaxed md:leading-high text-gray-800 max-w-4xl">
-          <span class="font-semibold">FLORAVELLE</span> is a modern perfume brand based in Pakistan, created for those who appreciate elegance, confidence, and lasting impressions.
-        </p>
-        
-        <p class="font-primary text-lg md:text-xl lg:text-2xl text-justify md:text-center leading-relaxed text-gray-700 max-w-4xl">
-          Our fragrances are crafted with carefully selected notes to deliver a luxurious and long lasting scent experience that feels sophisticated and premium.
-        </p>
-        
-        <div class="bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(196,176,124,1)_40%,rgba(208,192,150,1)_72%,rgba(255,255,255,0)_100%)] h-[2px] w-full max-w-2xl mx-auto my-4"></div>
-        
-        <div class="font-primary text-xl md:text-2xl lg:text-3xl space-y-4">
-          <p class="italic text-[#8A5633]">
-            "At FLORAVELLE, we believe a fragrance should become part of your identity <br class="hidden md:block" /> — subtle, memorable, and timeless."
-          </p>
-          <p class="text-[#A39579] font-medium tracking-wide pt-4">
-            FLORAVELLE — Elegance in Every Drop
-          </p>
-        </div>
-        
-      </div>
+    
+    <div class="z-10 text-center font-primary space-y-4 pt-20 px-4 reveal-section">
+      <h1 class="text-5xl md:text-8xl font-heading text-white tracking-widest uppercase mix-blend-overlay drop-shadow-sm">About <br class="md:hidden"/>
+        <span class="italic font-light">FLORAVELLE</span>
+      </h1>
+      <p class="text-sm md:text-lg font-roboto font-medium text-white/90 tracking-[0.3em] uppercase max-w-lg mx-auto leading-loose">
+        Elegance in Every Drop
+      </p>
     </div>
   </section>
+
+  <!-- Editorial Text Spread -->
+  <section class="container mx-auto px-6 md:px-12 py-24 md:py-40 font-primary">
+    
+    {/* First Block - The Brand */}
+    <div class="reveal-section flex flex-col md:flex-row gap-12 md:gap-24 items-start mb-32 md:mb-48">
+      <div class="w-full md:w-1/3">
+        <h2 class="text-[#A39579] tracking-[0.2em] text-sm md:text-base uppercase mb-4">The Origin</h2>
+        <div class="w-12 h-[1px] bg-[#A39579]"></div>
+      </div>
+      <div class="w-full md:w-2/3">
+        <p class="text-3xl md:text-5xl text-[#3B2D20] leading-[1.3] md:leading-[1.4] max-w-3xl font-heading">
+          <span class="font-semibold italic">FLORAVELLE</span> is a modern fragrance house based in Pakistan, created for those who appreciate quiet elegance, quiet confidence, and lasting impressions.
+        </p>
+      </div>
+    </div>
+
+    {/* Second Block - The Craft */}
+    <div class="reveal-section flex flex-col md:flex-row gap-12 md:gap-24 items-start mb-32 md:mb-48 md:pl-24">
+      <div class="w-full md:w-1/3 md:order-2">
+        <h2 class="text-[#A39579] tracking-[0.2em] text-sm md:text-base uppercase mb-4">The Craft</h2>
+        <div class="w-12 h-[1px] bg-[#A39579]"></div>
+      </div>
+      <div class="w-full md:w-2/3 md:order-1 text-left md:text-right">
+        <p class="text-2xl md:text-4xl text-gray-700 leading-relaxed md:leading-relaxed max-w-2xl ml-auto">
+          Our fragrances are formulated with meticulously selected notes to deliver a luxurious, evolving scent experience that feels sophisticated from the first spray to the final, lingering dry-down.
+        </p>
+      </div>
+    </div>
+
+    {/* Divider */}
+    <div class="reveal-section flex justify-center mb-32 md:mb-48">
+       <div class="bg-[linear-gradient(90deg,rgba(255,255,255,0)_0%,rgba(196,176,124,1)_40%,rgba(208,192,150,1)_72%,rgba(255,255,255,0)_100%)] h-[1px] w-full max-w-3xl opacity-50"></div>
+    </div>
+
+    {/* Third Block - The Philosophy */}
+    <div class="reveal-section text-center max-w-4xl mx-auto space-y-12">
+      <p class="text-4xl md:text-6xl text-[#3B2D20] font-heading leading-tight italic">
+        "We believe a fragrance should become an indelible part of your identity — subtle, memorable, and entirely timeless."
+      </p>
+      <p class="text-[#A39579] font-medium tracking-[0.3em] uppercase text-sm md:text-base">
+        FLORAVELLE — The Signature of Presence
+      </p>
+    </div>
+
+  </section>
 </Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import { ScrollTrigger } from "gsap/ScrollTrigger";
+  
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Simple parallax effect for the hero image
+  gsap.to('.parallax-bg', {
+    yPercent: 20,
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".parallax-bg",
+      start: "top top",
+      end: "bottom top",
+      scrub: true
+    }
+  });
+</script>
