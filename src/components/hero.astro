@@ -1,25 +1,20 @@
 ---
 import "../styles/global.css"
 import heroBg from "../assets/hero-4.jpeg"
+import { Image } from "astro:assets"
 import CarouselCounter from "../components/carousel-counter.astro"
 ---
 
-<section id="hero" class="h-[100dvh] bg-cover md:bg-right-top bg-center relative" style={`background-image : url(${heroBg.src})`}>
-  <!-- <div class="absolute inset-0 bg-black/10 z-10"/> -->
-  <!-- <div class="container h-full mx-auto flex flex-col justify-center z-20 px-4 md:px-0"> -->
-  <!--   <div class="font-primary space-y-4 max-w-4xl text-white z-40"> -->
-  <!--     <p class="text-xl md:text-xl font-primary font-thin md:px-2">LUXURY & PREMIUM</p> -->
-  <!--     <h1 class="text-5xl md:text-7xl font-primary leading-tight">Designed for <br class="hidden md:block"/> Daily Elegence</h1> -->
-  <!--     <p class="text-lg md:text-xl mt-4 md:mt-8 md:px-2">Elegence isn't occasional - it's woven into everyday <br class="hidden md:block"/> moments that define your pressence.</p> -->
-  <!--     <button class="text-lg md:text-2xl border-2 font-semibold border-[#7A5633]  -->
-  <!--       text-[#8A5633]   -->
-  <!--       hover:bg-[#7A5633] hover:text-white rounded-full px-6 py-3 md:p-4 mt-8 md:mt-18 cursor-pointer"> -->
-  <!--       Find Your Signature -->
-  <!--     </button> -->
-  <!--   </div> -->
-  <!-- </div> -->
+<section id="hero" class="h-[100dvh] relative overflow-hidden">
+  <Image 
+    src={heroBg} 
+    alt="Floravelle Hero" 
+    class="absolute inset-0 w-full h-full object-cover md:object-[right_top] object-center z-10"
+    loading="eager"
+    fetchpriority="high"
+  />
 
-  <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12  font-heading pt-32">
+  <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12 font-heading pt-32 z-10 relative">
     <div class="flex flex-1 md:flex-row flex-col justify-between w-full ">
       <div class="h-fit overflow-hidden flex items-center">
         <h1 class="md:text-[14rem] text-[5rem] translate-y-90 heading font-heading">Timeless</h1>
@@ -43,10 +38,12 @@ const animate = () => {
   const headings = document.querySelectorAll(".heading");
   const paragraph = document.querySelector(".paragraph");
 
+  const isSkipped = (window as any).skipAnimations;
+
   headings.forEach((heading) => {
     gsap.to(heading, {
       y:0,
-      duration : 1.8,
+      duration : isSkipped ? 0 : 1.8,
       ease : "power3.out"
     });
   })
@@ -55,7 +52,7 @@ const animate = () => {
   gsap.to(paragraph,{
     y:0,
     opacity:1,
-    duration : 1.8,
+    duration : isSkipped ? 0 : 1.8,
     ease : "power3.out"
   });
 
@@ -66,13 +63,18 @@ window.addEventListener('preloaderComplete', () => {
   animate();
 });
 
-// Fallback in case preloader is missing or already completed
-setTimeout(() => {
-	const preloader = document.getElementById('preloader');
-	if (!preloader && !window.hasOwnProperty('preloaderAnimated')) {
-		animate();
-	}
-}, 3000);
+
+// Check if preloader already finished or should be skipped
+if ((window as any).preloaderFinished || !(document.getElementById('preloader'))) {
+  animate();
+} else {
+  // Fallback in case preloader is missing or already completed
+  setTimeout(() => {
+    if (!(window as any).preloaderFinished) {
+       animate();
+    }
+  }, 3000);
+}
 </script>
 
 

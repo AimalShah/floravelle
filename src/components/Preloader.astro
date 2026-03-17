@@ -21,8 +21,25 @@ import '../styles/global.css';
   const initPreloader = () => {
     const preloader = document.getElementById('preloader');
 
+    // Navigation Detection Logic
+    const navEntries = performance.getEntriesByType("navigation");
+    const isReload = navEntries.length > 0 && (navEntries[0].type === "reload");
+    const isInternalNavigation = document.referrer.includes(window.location.host);
+
+    // Set global flag for other components to skip animations if needed
+    (window as any).skipAnimations = isInternalNavigation && !isReload;
+
+    // Skip preloader on internal link clicks (not a reload, but coming from our own domain)
+    if (isInternalNavigation && !isReload) {
+        (window as any).preloaderFinished = true;
+        if (preloader) preloader.remove();
+        window.dispatchEvent(new CustomEvent('preloaderComplete'));
+        return;
+    }
+
     const tl = gsap.timeline({
       onComplete: () => {
+        (window as any).preloaderFinished = true;
         // Dispatch an event so other components (like Hero) know when to start
         window.dispatchEvent(new CustomEvent('preloaderComplete'));
         

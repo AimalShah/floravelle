@@ -25,11 +25,12 @@ import {gsap} from "gsap";
 
 const animateHeader = () => {
   const header = document.querySelector(".t-header");
+  const isSkipped = (window as any).skipAnimations;
 
   gsap.to(header, {
     top : 0,
     opacity :1,
-    duration :1.0,
+    duration : isSkipped ? 0 : 1.0,
     ease : "none"
   })
 }
@@ -38,12 +39,16 @@ window.addEventListener('preloaderComplete', () => {
   animateHeader();
 });
 
-// Fallback in case preloader is missing or already completed
-setTimeout(() => {
-	const preloader = document.getElementById('preloader');
-	if (!preloader && !window.hasOwnProperty('preloaderAnimated')) {
-		animateHeader();
-	}
-}, 3000);
+// Check if preloader already finished or should be skipped
+if ((window as any).preloaderFinished || !(document.getElementById('preloader'))) {
+  animateHeader();
+} else {
+  // Fallback in case preloader is missing or already completed
+  setTimeout(() => {
+    if (!(window as any).preloaderFinished) {
+       animateHeader();
+    }
+  }, 3000);
+}
 
 </script>
