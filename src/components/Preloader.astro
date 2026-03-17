@@ -19,13 +19,14 @@ import '../styles/global.css';
   import { gsap } from 'gsap';
 
   const initPreloader = () => {
+    const preloader = document.getElementById('preloader');
+
     const tl = gsap.timeline({
       onComplete: () => {
         // Dispatch an event so other components (like Hero) know when to start
         window.dispatchEvent(new CustomEvent('preloaderComplete'));
         
         // Remove preloader from DOM after animation completes to free up resources
-        const preloader = document.getElementById('preloader');
         if (preloader) {
             preloader.remove();
         }
