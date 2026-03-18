@@ -20,7 +20,7 @@ export const productsData = {
     name: "Mirage",
     images: [mirageImg, mirage1Img, mirage2Img, mirage4Img],
     subtitle: "Ethereal Desert Breeze",
-    price: "Rs. 2500",
+    price: "Rs. 2,500",
     description: "Mirage captures the essence of a hidden sanctuary. It's a scent that blurs the lines between reality and dream, offering a refreshing yet mysterious aura that evolves beautifully throughout the day.",
     notes: {
       top: "Pear Blossom",
@@ -32,7 +32,7 @@ export const productsData = {
     name: "Manha",
     images: [manhaImg, manha1Img],
     subtitle: "Fresh Floral Elegance",
-    price: "Rs. 4,500",
+    price: "Rs. 2,500",
     description: "Manha is a delicate expression of femininity. It opens with bright, uplifting floral notes before settling into a soft, memorable embrace. Perfect for daytime wear and elegant evenings.",
     notes: {
       top: "Pear Blossom",
@@ -44,7 +44,7 @@ export const productsData = {
     name: "Shadow",
     images: [shadowImg, shadow1Img, shadow2Img],
     subtitle: "Dark Woody Mystery",
-    price: "Rs. 5,200",
+    price: "Rs. 2,500",
     description: "Shadow brings an alluring depth to your presence. Complex, woody, and intensely magnetic, it is crafted for those who leave a powerful, lingering impression.",
     notes: {
       top: "Spices, Cardamom, Black Pepper",
@@ -56,7 +56,7 @@ export const productsData = {
     name: "Odyessy",
     images: [odyessyImg, od1Img, od2Img],
     subtitle: "Bold Citrus Adventure",
-    price: "Rs. 4,800",
+    price: "Rs. 2,500",
     description: "A vibrant burst of energy. Odyessy combines zesty citrus with dynamic aromatic undertones, making it the perfect companion for the confident and the adventurous.",
     notes: {
       top: "Lemon, Grapefruit, Mint",

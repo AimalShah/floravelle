@@ -8,7 +8,10 @@ import bannerImg from '../assets/banner-4.jpeg'; // Re-using atmospheric image f
 const products = Object.entries(productsData).map(([id, data]) => ({ id, ...data }));
 ---
 
-<Layout>
+<Layout 
+  title="The Collection | FloraVelle" 
+  description="Explore our curated selection of signature scents. Each fragrance at FLORAVELLE is thoughtfully crafted to evoke deep emotion and leave a lasting impression."
+>
   <!-- Beautiful Hero for Collection -->
   <section class="h-[70vh] md:h-[80vh] relative flex items-center justify-center overflow-hidden">
     <div class="absolute inset-0 z-0 select-none">

@@ -3,44 +3,44 @@ import "../styles/global.css"
 ---
 
 
-<footer class="bg-[#E8E4DE] py-8">
-  <div class="container mx-auto font-primary w-full relative h-auto px-4 md:px-0">
-    <div class="grid grid-cols-2 md:grid-cols-4 gap-8 mb-12 md:mb-24">
+<footer class="bg-[#E8E4DE] py-12 md:py-20 mt-20">
+  <div class="container mx-auto font-primary px-4 md:px-0">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-12 mb-16 md:mb-32">
+      <!-- Explore -->
       <nav>
-        <h3 class="text-xl font-bold mb-4">Explore</h3>
-        <ul class="flex flex-col text-lg font-thin text-black/70 space-y-2">
-          <a class="cursor-pointer hover:text-black transition-colors" href="/collection">Collection</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="/#products">Signature Scents</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="/collection">Gifts & Sets</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="/collection">New Arrivals</a> 
+        <h3 class="text-xl md:text-2xl font-bold mb-6 italic">Explore</h3>
+        <ul class="flex flex-col text-lg md:text-xl font-thin text-black/70 space-y-3">
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/collection">Collection</a></li>
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/#products">Signature Scents</a></li>
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/collection">Gifts & Sets</a></li>
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/collection">New Arrivals</a></li>
         </ul>
       </nav>
+
+      <!-- Company -->
       <nav>
-        <h3 class="text-xl font-bold mb-4">Company</h3>
-        <ul class="flex flex-col text-lg font-thin text-black/70 space-y-2">
-          <a class="cursor-pointer hover:text-black transition-colors" href="/about">About Us</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Our Philosophy</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Sustainability</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Careers</a> 
+        <h3 class="text-xl md:text-2xl font-bold mb-6 italic">Company</h3>
+        <ul class="flex flex-col text-lg md:text-xl font-thin text-black/70 space-y-3">
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/about">About Us</a></li>
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/#philosophy">Our Philosophy</a></li>
         </ul>
       </nav>
+
+      <!-- Support -->
       <nav>
-        <h3 class="text-xl font-bold mb-4">Support</h3>
-        <ul class="flex flex-col text-lg font-thin text-black/70 space-y-2">
-          <a class="cursor-pointer hover:text-black transition-colors" href="/contact">Contact Us</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Shipping & Returns</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">FAQ</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Track Order</a> 
-        </ul>
-      </nav>
-      <nav>
-        <h3 class="text-xl font-bold mb-4">Legal</h3>
-        <ul class="flex flex-col text-lg font-thin text-black/70 space-y-2">
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Privacy Policy</a> 
-          <a class="cursor-pointer hover:text-black transition-colors" href="#">Terms of Service</a> 
+        <h3 class="text-xl md:text-2xl font-bold mb-6 italic">Support</h3>
+        <ul class="flex flex-col text-lg md:text-xl font-thin text-black/70 space-y-3">
+          <li><a class="cursor-pointer hover:text-black hover:translate-x-1 transition-all duration-300 inline-block" href="/contact">Contact Us</a></li>
         </ul>
       </nav>
     </div>
-    <p class="text-[4rem] sm:text-[8rem] md:text-[15rem] leading-none tracking-tighter sm:tracking-normal overflow-hidden">FLORAVELLE</p>
+
+    <div class="flex flex-col md:flex-row justify-between items-center mt-12 pt-8 border-t border-black/10 text-black/50 text-sm md:text-base">
+      <p>&copy; {new Date().getFullYear()} FLORAVELLE PERFUMES. All rights reserved.</p>
+      <div class="mt-4 md:mt-0 flex gap-6 italic">
+        <span>Handcrafted in Pakistan</span>
+        <span>Elegance in every drop</span>
+      </div>
+    </div>
   </div>
 </footer>
