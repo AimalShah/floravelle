@@ -1,0 +1,82 @@
+---
+import Logo from "../assets/logo-1.png"
+import {Image} from "astro:assets"
+---
+
+<div id="mobile-menu" class="fixed inset-0 z-[100] bg-[#F0EBE5] translate-x-full transition-transform duration-500 ease-in-out md:hidden flex flex-col">
+  
+  <!-- Header inside menu -->
+  <div class="px-6 py-4 flex items-center justify-between border-b border-[#3B2D20]/5">
+    <div class="flex-1"></div>
+    <div class="flex-shrink-0">
+      <Image src={Logo} alt="Logo" class="w-10 h-auto" />
+    </div>
+    <div class="flex-1 flex justify-end">
+      <button id="mobile-menu-close" class="text-[#3B2D20] p-2">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <!-- Navigation Links -->
+  <nav class="flex-1 flex flex-col items-center justify-center space-y-12 px-6">
+    <a href="/" class="mobile-menu-link text-4xl font-heading text-[#3B2D20] tracking-widest uppercase opacity-0 translate-y-4">Home</a>
+    <a href="/about" class="mobile-menu-link text-4xl font-heading text-[#3B2D20] tracking-widest uppercase opacity-0 translate-y-4">About</a>
+    <a href="/collection" class="mobile-menu-link text-4xl font-heading text-[#3B2D20] tracking-widest uppercase opacity-0 translate-y-4">Collection</a>
+    <a href="/contact" class="mobile-menu-link text-4xl font-heading text-[#3B2D20] tracking-widest uppercase opacity-0 translate-y-4">Contact</a>
+  </nav>
+
+  <!-- Footer inside menu -->
+  <div class="p-12 text-center">
+    <p class="text-[0.6rem] uppercase tracking-[0.3em] text-[#A39579] font-medium">Elegance in Every Drop</p>
+  </div>
+</div>
+
+<script>
+  import { gsap } from "gsap";
+
+  const menu = document.getElementById('mobile-menu');
+  const openBtns = document.querySelectorAll('.mobile-menu-open');
+  const closeBtn = document.getElementById('mobile-menu-close');
+  const links = document.querySelectorAll('.mobile-menu-link');
+
+  const openMenu = () => {
+    if (!menu) return;
+    document.body.style.overflow = 'hidden';
+    gsap.to(menu, { x: 0, duration: 0.6, ease: "power4.out" });
+    gsap.to(links, { 
+      opacity: 1, 
+      y: 0, 
+      duration: 0.5, 
+      stagger: 0.1, 
+      delay: 0.3,
+      ease: "power2.out"
+    });
+  };
+
+  const closeMenu = () => {
+    if (!menu) return;
+    document.body.style.overflow = '';
+    gsap.to(menu, { x: '100%', duration: 0.4, ease: "power2.in" });
+    gsap.set(links, { opacity: 0, y: 16 });
+  };
+
+  openBtns.forEach(btn => btn.addEventListener('click', openMenu));
+  closeBtn?.addEventListener('click', closeMenu);
+
+  // Close menu on link click
+  links.forEach(link => link.addEventListener('click', () => {
+     // Small delay to let the click through before closing animation
+     setTimeout(closeMenu, 200);
+  }));
+
+  // Handle page transitions
+  document.addEventListener('astro:page-load', () => {
+    const newOpenBtns = document.querySelectorAll('.mobile-menu-open');
+    const newCloseBtn = document.getElementById('mobile-menu-close');
+    newOpenBtns.forEach(btn => btn.addEventListener('click', openMenu));
+    newCloseBtn?.addEventListener('click', closeMenu);
+  });
+</script>
