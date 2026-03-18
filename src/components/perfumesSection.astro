@@ -38,7 +38,7 @@ import {products} from "../utils/data.ts"
   <div class="mt-8 md:mt-12 container mx-auto md:overflow-x-clip h-auto flex flex-col md:flex-row gap-8 md:gap-18 px-4 md:px-0">
     <div id="carousel" class="flex md:flex-row flex-col gap-8 md:gap-18 transition-transform duration-300">
       { products.map((product) => (
-      <div class="w-full md:w-[28rem] h-auto md:h-[30rem] cursor-pointer group flex-nowrap">
+      <div class="w-full md:w-[28rem] h-auto md:h-[30rem] group flex-nowrap">
         <div class="w-full overflow-hidden h-[20rem] md:h-[25rem]">
           <Image
             src={product.src}
@@ -52,7 +52,7 @@ import {products} from "../utils/data.ts"
             <p class="text-gray-600 text-lg md:text-xl">{product.description}</p>
           </div>
           <div class="flex items-center">
-            <a href={`/products/${product.name}`} class="text-base md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full p-2 cursor-pointer">View Details</a>
+            <a href={`/products/${product.name}`} class="text-base md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] cursor-pointer hover:bg-[#7A5633] hover:text-white rounded-full p-2 cursor-pointer">View Details</a>
           </div>
         </div>
       </div> 
@@ -64,35 +64,75 @@ import {products} from "../utils/data.ts"
 
 <script>
 import { gsap } from "gsap";
+import { Draggable } from "gsap/Draggable";
 
-let index = 0;
+gsap.registerPlugin(Draggable);
 
-const slides = document.querySelectorAll("#carousel > div");
-const total = slides.length;
+document.addEventListener("DOMContentLoaded", () => {
+  let index = 0;
 
-const next = document.getElementById("next");
-const prev = document.getElementById("prev");
+  const carousel = document.getElementById("carousel");
+  const slides = document.querySelectorAll("#carousel > div");
+  const total = slides.length;
 
-next.addEventListener("click", () => {
-  if (index < total - 3) {
-    index++;
-    gsap.to("#carousel", {
-      x: `-${index * 25.333}%`,
+  const next = document.getElementById("next");
+  const prev = document.getElementById("prev");
+
+  // Calculate slide width (including gap)
+  const gap = 32; // gap-8 = 32px
+  const slideWidth = slides[0].offsetWidth + gap;
+
+  // Max index (adjust based on how many visible at once)
+  const visibleSlides = window.innerWidth >= 768 ? 3 : 1;
+  const maxIndex = total - visibleSlides;
+
+  // Function to move carousel
+  const goToSlide = (i) => {
+    index = Math.max(0, Math.min(i, maxIndex));
+
+    gsap.to(carousel, {
+      x: -(index * slideWidth),
       duration: 0.2,
       ease: "none"
     });
-  }
-});
+  };
 
-prev.addEventListener("click", () => {
-  if (index > 0) {
-    index--;
-    gsap.to("#carousel", {
-      x: `-${index * 30.333}%`,
-      duration: 0.2,
-      ease: "none"
+  // Buttons
+  next.addEventListener("click", () => {
+    goToSlide(index + 1);
+  });
+
+  prev.addEventListener("click", () => {
+    goToSlide(index - 1);
+  });
+
+  // Draggable
+  Draggable.create(carousel, {
+    type: "x",
+    inertia: true,
+    edgeResistance: 0.85,
+    bounds: {
+      minX: -(slideWidth * maxIndex),
+      maxX: 0
+    },
+
+    onDragEnd: function () {
+      const draggedIndex = Math.round(Math.abs(this.x) / slideWidth);
+      goToSlide(draggedIndex);
+    }
+  });
+
+  // Optional: handle resize (keeps it responsive)
+  window.addEventListener("resize", () => {
+    const newVisible = window.innerWidth >= 768 ? 3 : 1;
+    const newMaxIndex = total - newVisible;
+
+    index = Math.min(index, newMaxIndex);
+
+    gsap.set(carousel, {
+      x: -(index * slideWidth)
     });
-  }
+  });
 });
 </script>
 
