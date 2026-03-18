@@ -14,7 +14,7 @@ const { isHome = false } = Astro.props;
       <Image
         src={Logo}
         alt="floravelle"
-        class="rounded-fill md:size-16 size-18 object-contain "
+        class="rounded-full md:size-16 size-12 object-contain "
       />
       <!-- Floravelle -->
     </a>
@@ -25,8 +25,8 @@ const { isHome = false } = Astro.props;
       <a href="/contact" class="cursor-pointer hover:text-[#8A5633] transition-colors duration-300">Contact</a>
     </nav>
 
-    <div>
-      <a href="/collection" class="cursor-pointer hover:text-[#8A5633] transition-colors text-lg font-semibold duration-300">Collection</a>
+    <div class="flex items-center">
+      <a href="/collection" class="cursor-pointer hover:text-[#8A5633] transition-colors text-base md:text-lg font-semibold uppercase tracking-wider duration-300">Collection</a>
     </div>
 
   </div>
