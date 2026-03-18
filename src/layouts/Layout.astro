@@ -17,6 +17,8 @@ const {
 	image = "/og-image.jpg", // Make sure this exists or use a default
 	canonicalURL = Astro.url.href
 } = Astro.props;
+
+const isHome = Astro.url.pathname === "/";
 ---
 
 <!doctype html>
@@ -58,8 +60,8 @@ const {
 	</head>
 	<body>
 		<Preloader/>
-   	<Header/>
-		<TransparentHeader/>
+   	<Header isHome={isHome}/>
+		{isHome && <TransparentHeader/>}
 		<slot />
 		<Footer/>
 	</body>

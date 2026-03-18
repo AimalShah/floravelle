@@ -2,9 +2,11 @@
 import "../styles/global.css"
 import Logo from "../assets/logo-1.png"
 import {Image} from "astro:assets"
+
+const { isHome = false } = Astro.props;
 ---
 
-<header id="site-header" class="md:py-4 py-2 fixed top-0 left-0 w-full z-50 bg-[#F0EBE5] opacity-0 shadow-xl">
+<header id="site-header" class={`md:py-4 py-2 fixed top-0 left-0 w-full z-50 bg-[#F0EBE5] shadow-xl ${isHome ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'}`}>
   <div class="flex container mx-auto items-center justify-between font-primary px-4 md:px-8">
     
     <!-- Logo -->
@@ -30,7 +32,7 @@ import {Image} from "astro:assets"
   </div>
 </header>
 
-<script>
+<script define:vars={{ isHome }}>
 import {gsap} from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger"
 
@@ -38,6 +40,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 const headerScroll = () => {
+  if (!isHome) return;
 
 const header = document.getElementById("site-header");
 const hero = document.getElementById("hero");
