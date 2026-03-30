@@ -91,23 +91,43 @@ const isHome = Astro.url.pathname === "/";
 	// As we process components next, we will add '.reveal-element' to things we want animated.
 
 	const initScrollAnimations = () => {
-		const revealElements = document.querySelectorAll('.reveal-section');
-
-		revealElements.forEach((el) => {
-			gsap.fromTo(el, 
-				{ opacity: 0, y: 50 }, 
+		// Section reveals
+		const revealSections = document.querySelectorAll('.reveal-section');
+		revealSections.forEach((section) => {
+			gsap.fromTo(section, 
+				{ opacity: 0, y: 30 }, 
 				{
 					opacity: 1,
 					y: 0,
-					duration: 1.2,
-					ease: "power3.out",
+					duration: 1.5,
+					ease: "power2.out",
 					scrollTrigger: {
-						trigger: el,
-						start: "top 80%", // Animates when top of element hits 80% down viewport
-						toggleActions: "play none none none" // only play once
+						trigger: section,
+						start: "top 85%",
+						toggleActions: "play none none none"
 					}
 				}
 			);
+
+			// Staggered child reveals within the section
+			const elements = section.querySelectorAll('.reveal-element');
+			if (elements.length > 0) {
+				gsap.fromTo(elements,
+					{ opacity: 0, y: 20 },
+					{
+						opacity: 1,
+						y: 0,
+						duration: 1,
+						stagger: 0.15,
+						ease: "power2.out",
+						scrollTrigger: {
+							trigger: section,
+							start: "top 80%",
+							toggleActions: "play none none none"
+						}
+					}
+				);
+			}
 		});
 	};
 
