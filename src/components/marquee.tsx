@@ -19,12 +19,14 @@ export default function Marquee() {
     return () => ctx.revert();
   }, [])
   return (
-    <div ref={marqueeRef} className="py-8 border-y bg-[#E8E4DE] overflow-hidden text-nowrap">
+    <div ref={marqueeRef} className="py-4 border-y bg-[#E8E4DE] overflow-hidden text-nowrap">
       <div
         className="marquee-track flex whitespace-nowrap w-max"
       >
-        <span className="text-3xl md:text-5xl font-primary font-thin text-nowrap mx-4 md:mx-8">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
-        <span className="text-3xl md:text-5xl font-primary font-thin text-nowrap">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
+        <span className="text-xl md:text-3xl font-primary font-thin text-nowrap mx-4 md:mx-8">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
+        <span className="text-xl md:text-3xl font-primary font-thin text-nowrap">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
+        <span className="text-xl md:text-3xl font-primary font-thin text-nowrap">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
+        <span className="text-xl md:text-3xl font-primary font-thin text-nowrap">DAILY ELEGANCE ✦ SIGNATURE SCENTS ✦ PURE AROMAS ✦</span>
       </div>
     </div>
   )

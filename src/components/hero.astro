@@ -1,18 +1,27 @@
 ---
 import "../styles/global.css"
 import heroBg from "../assets/hero-4.jpeg"
+import heroMobileBg from "../assets/hero-6.jpeg"
 import { Image } from "astro:assets"
 import CarouselCounter from "../components/carousel-counter.astro"
 ---
 
-<section id="hero" class="h-[100dvh] relative overflow-hidden">
+<section id="hero" class="h-[100dvh] relative overflow-hidden bg-[#F0EBE5]">
   <Image 
     src={heroBg} 
-    alt="Floravelle Hero" 
-    class="absolute inset-0 w-full h-full object-cover md:object-[right_top] object-center z-10"
+    alt="Floravelle Hero Desktop" 
+    class="absolute inset-0 w-full h-full object-cover md:object-[right_top] object-center z-0 hidden md:block"
     loading="eager"
     fetchpriority="high"
   />
+  <Image 
+    src={heroMobileBg} 
+    alt="Floravelle Hero Mobile" 
+    class="absolute inset-0 w-full h-full object-cover object-center z-0 block md:hidden"
+    loading="eager"
+    fetchpriority="high"
+  />
+  <div class="absolute inset-0 bg-black/20 z-0 block md:hidden"></div>
 
   <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12 font-heading pt-32 z-10 relative">
     <div class="flex flex-1 md:flex-row flex-col justify-between w-full ">
@@ -24,8 +33,10 @@ import CarouselCounter from "../components/carousel-counter.astro"
           <a href="/collection" class="text-right underline cursor-pointer">EXPLORE THE COLLECTION</a>
       </div>
     </div>
-    <div class="flex flex-1 justify-end items-center overflow-hidden ">
-      <h1 class="md:text-[14rem] text-[5rem]  text-right translate-y-96 heading">Fragrance</h1>
+    <div class="flex flex-1 justify-end items-center ">
+      <div class="overflow-hidden h-fit">
+        <h1 class="md:text-[14rem] text-[5rem] text-right translate-y-96 heading leading-[0.8] py-4">Fragrance</h1>
+      </div>
     </div>
   </div>
 </section>
