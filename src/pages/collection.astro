@@ -26,9 +26,9 @@ const products = Object.entries(productsData).map(([id, data]) => ({ id, ...data
     </div>
     
     <div class="container mx-auto px-4 z-10 text-center space-y-8" id="collection-hero-text">
-        <h1 class="text-6xl md:text-[10rem] font-heading text-white tracking-widest uppercase leading-tight drop-shadow-2xl">The<br class="md:hidden"/> Collection</h1>
+        <h1 class="text-4xl md:text-[10rem] font-heading text-white tracking-widest uppercase leading-tight drop-shadow-2xl">The<br class="md:hidden"/> Collection</h1>
         <div class="h-px w-24 md:w-32 bg-white/50 mx-auto"></div>
-        <p class="text-lg md:text-2xl text-white/90 max-w-2xl mx-auto font-roboto tracking-widest leading-relaxed uppercase">
+        <p class="text-base md:text-2xl text-white/90 max-w-2xl mx-auto font-roboto tracking-widest leading-relaxed uppercase">
             Signature Essences crafted for the modern identity
         </p>
     </div>
@@ -85,10 +85,10 @@ const products = Object.entries(productsData).map(([id, data]) => ({ id, ...data
           <div class={`w-full md:w-1/2 font-primary flex flex-col justify-center space-y-8 ${isEven ? 'md:order-1' : 'md:order-2'} reveal-element`}>
             <div>
               <p class="text-[#A39579] tracking-[0.2em] text-sm md:text-base uppercase mb-2 reveal-element">{product.subtitle}</p>
-              <h2 class="text-5xl md:text-7xl font-heading text-[#3B2D20] capitalize reveal-element">{product.name}</h2>
+              <h2 class="text-4xl md:text-7xl font-heading text-[#3B2D20] capitalize reveal-element">{product.name}</h2>
             </div>
             
-            <p class="text-lg md:text-xl text-gray-700 leading-relaxed max-w-xl reveal-element">
+            <p class="text-base md:text-xl text-gray-700 leading-relaxed max-w-xl reveal-element">
               {product.description}
             </p>
 
