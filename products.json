@@ -1,0 +1,99 @@
+{
+  "products": [
+    {
+      "sku": "FLV-MIR-001",
+      "id": "mirage",
+      "name": "Mirage",
+      "subtitle": "Ethereal Desert Breeze",
+      "price": "Rs. 2,500",
+      "priceNumeric": 2500,
+      "currency": "PKR",
+      "description": "Mirage captures the essence of a hidden sanctuary. It's a scent that blurs the lines between reality and dream, offering a refreshing yet mysterious aura that evolves beautifully throughout the day.",
+      "notes": {
+        "top": "Pear Blossom",
+        "heart": "White Gardenia, Jasmine",
+        "base": "Brown sugar, Patchouli"
+      },
+      "images": [
+        "/assets/mirage.png",
+        "/assets/mirage/mirage-1.png",
+        "/assets/mirage/mirage-2.png",
+        "/assets/mirage/mirag-4.png"
+      ],
+      "category": "Perfume",
+      "inStock": true
+    },
+    {
+      "sku": "FLV-MAN-001",
+      "id": "manha",
+      "name": "Manha",
+      "subtitle": "Fresh Floral Elegance",
+      "price": "Rs. 2,500",
+      "priceNumeric": 2500,
+      "currency": "PKR",
+      "description": "Manha is a delicate expression of femininity. It opens with bright, uplifting floral notes before settling into a soft, memorable embrace. Perfect for daytime wear and elegant evenings.",
+      "notes": {
+        "top": "Pear Blossom",
+        "heart": "White Gardenia, Jasmine",
+        "base": "Brown sugar, Patchouli"
+      },
+      "images": [
+        "/assets/manha.png",
+        "/assets/manha/manha-flower.png"
+      ],
+      "category": "Perfume",
+      "inStock": true
+    },
+    {
+      "sku": "FLV-SHD-001",
+      "id": "shadow",
+      "name": "Shadow",
+      "subtitle": "Dark Woody Mystery",
+      "price": "Rs. 2,500",
+      "priceNumeric": 2500,
+      "currency": "PKR",
+      "description": "Shadow brings an alluring depth to your presence. Complex, woody, and intensely magnetic, it is crafted for those who leave a powerful, lingering impression.",
+      "notes": {
+        "top": "Spices, Cardamom, Black Pepper",
+        "heart": "Oud, Leather, Patchouli",
+        "base": "Amber, Vetiver, Dark Woods"
+      },
+      "images": [
+        "/assets/shadow.png",
+        "/assets/shadow/shadow-1.png",
+        "/assets/shadow/shadow-2.png"
+      ],
+      "category": "Perfume",
+      "inStock": true
+    },
+    {
+      "sku": "FLV-ODY-001",
+      "id": "odyessy",
+      "name": "Odyessy",
+      "subtitle": "Bold Citrus Adventure",
+      "price": "Rs. 2,500",
+      "priceNumeric": 2500,
+      "currency": "PKR",
+      "description": "A vibrant burst of energy. Odyessy combines zesty citrus with dynamic aromatic undertones, making it the perfect companion for the confident and the adventurous.",
+      "notes": {
+        "top": "Lemon, Grapefruit, Mint",
+        "heart": "Ginger, Nutmeg, Pink Pepper",
+        "base": "Cedarwood, Sandalwood, Moss"
+      },
+      "images": [
+        "/assets/odyssey.png",
+        "/assets/odyssey/od-1.png",
+        "/assets/odyssey/od-2.png"
+      ],
+      "category": "Perfume",
+      "inStock": true
+    }
+  ],
+  "metadata": {
+    "totalProducts": 4,
+    "currency": "PKR",
+    "defaultPrice": 2500,
+    "brand": "FloraVelle",
+    "generatedDate": "2026-04-17"
+  }
+}
