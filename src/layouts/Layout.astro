@@ -4,6 +4,8 @@ import TransparentHeader from "../components/transparent-header.astro"
 import Footer from "../components/footer.astro"
 import Preloader from "../components/Preloader.astro"
 import MobileMenu from "../components/MobileMenu.astro"
+import CartDrawer from "../components/CartDrawer"
+import FloatingCart from "../components/FloatingCart"
 
 interface Props {
 	title?: string;
@@ -65,6 +67,8 @@ const isHome = Astro.url.pathname === "/";
    	<Header isHome={isHome}/>
 		{isHome && <TransparentHeader/>}
 		<MobileMenu />
+		<CartDrawer client:load />
+		<FloatingCart client:load />
 		<slot />
 		<Footer/>
 	</body>

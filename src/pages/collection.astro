@@ -2,6 +2,7 @@
 import Layout from '../layouts/Layout.astro';
 import { productsData } from '../utils/data';
 import { Image } from 'astro:assets';
+import AddToCartButton from '../components/AddToCartButton';
 import bannerImg from '../assets/banner-4.jpeg'; // Re-using atmospheric image for hero
 
 // Convert object to array for mapping
@@ -108,11 +109,23 @@ const products = Object.entries(productsData).map(([id, data]) => ({ id, ...data
               </div>
             </div>
 
-            <div class="pt-8 flex items-center gap-6 reveal-element">
-              <span class="text-2xl md:text-3xl text-[#3B2D20]">{"Rs. 2500"}</span>
-              <a href={`/products/${product.id}`} class="inline-block text-lg font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full px-8 py-3 transition-colors duration-300 shadow-sm">
-                Discover
-              </a>
+            <div class="pt-8 flex flex-wrap items-center gap-6 reveal-element">
+              <span class="text-2xl md:text-3xl text-[#3B2D20]">{product.price}</span>
+              <div class="flex items-center gap-4">
+                <AddToCartButton 
+                  client:load 
+                  product={{
+                    id: product.id,
+                    name: product.name,
+                    price: 2500, // Hardcoded for now based on data, ideally parse from string
+                    image: product.images[0].src,
+                    subtitle: product.subtitle
+                  }} 
+                />
+                <a href={`/products/${product.id}`} class="inline-block text-sm font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full px-8 py-3 transition-colors duration-300 shadow-sm uppercase tracking-widest">
+                  Discover
+                </a>
+              </div>
             </div>
           </div>
         </section>

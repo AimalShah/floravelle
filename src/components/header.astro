@@ -2,6 +2,7 @@
 import "../styles/global.css"
 import Logo from "../assets/logo-1.png"
 import {Image} from "astro:assets"
+import CartButton from "./CartButton"
 
 const { isHome = false } = Astro.props;
 ---
@@ -39,11 +40,14 @@ const { isHome = false } = Astro.props;
       <!-- Desktop Right Nav -->
       <nav class="hidden md:flex items-center justify-end gap-12 flex-1">
         <a href="/contact" class="text-xs uppercase tracking-[0.4em] font-medium text-[#3B2D20] hover:text-[#8A5633] transition-colors">Contact</a>
-        <a href="/collection" class="text-[0.6rem] border border-[#8A5633]/30 px-5 py-2 hover:bg-[#8A5633] hover:text-white transition-all uppercase tracking-[0.3em] font-semibold">Shop Now</a>
+        <div class="flex items-center gap-6">
+          <CartButton client:load dark={true} className="hidden md:flex" />
+          <a href="/collection" class="text-[0.6rem] border border-[#8A5633]/30 px-5 py-2 hover:bg-[#8A5633] hover:text-white transition-all uppercase tracking-[0.3em] font-semibold">Shop Now</a>
+        </div>
       </nav>
 
       <!-- Mobile Right: Collection Link -->
-      <div class="md:hidden flex-1 flex justify-end items-center">
+      <div class="md:hidden flex-1 flex justify-end items-center gap-4">
          <a href="/collection" class="text-[0.65rem] uppercase tracking-[0.2em] font-bold text-[#8A5633]">Collection</a>
       </div>
 

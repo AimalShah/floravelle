@@ -1,5 +1,6 @@
 ---
 import "../styles/global.css"
+import CartButton from "./CartButton"
 ---
 
 
@@ -32,11 +33,14 @@ import "../styles/global.css"
       <!-- Desktop Right Nav -->
       <nav class="hidden md:flex items-center justify-end gap-12 flex-1 text-white">
         <a href="/contact" class="text-xs uppercase tracking-[0.4em] font-medium hover:opacity-70 transition-opacity">Contact</a>
-        <a href="/collection" class="text-[0.6rem] border border-white/40 px-5 py-2 hover:bg-white hover:text-black transition-all uppercase tracking-[0.3em] font-semibold">Reserve Now</a>
+        <div class="flex items-center gap-6">
+          <CartButton client:load className="hidden md:flex" />
+          <a href="/collection" class="text-[0.6rem] border border-white/40 px-5 py-2 hover:bg-white hover:text-black transition-all uppercase tracking-[0.3em] font-semibold">Reserve Now</a>
+        </div>
       </nav>
 
       <!-- Mobile Right: Collection Link -->
-      <div class="md:hidden flex-1 flex justify-end items-center text-white">
+      <div class="md:hidden flex-1 flex justify-end items-center gap-4 text-white">
          <a href="/collection" class="text-[0.65rem] uppercase tracking-[0.3em] font-bold">Collection</a>
       </div>
 
