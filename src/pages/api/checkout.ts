@@ -1,5 +1,7 @@
 import { woo, mapProduct } from '../../lib/api/woocommerce';
 
+const WOO_API_URL = process.env.WOO_API_URL || '';
+
 export async function POST({ request }) {
   try {
     const orderData = await request.json();
@@ -42,15 +44,22 @@ export async function POST({ request }) {
         country: orderData.shipping.country || 'IN',
       },
       payment_method: orderData.paymentMethod,
+      payment_method_title: orderData.paymentMethod === 'cod' ? 'Cash on Delivery' : orderData.paymentMethod,
       customer_note: orderData.customerNote || '',
     };
 
     // Create order in WooCommerce
     const order = await woo.createOrder(wooOrderData);
 
+    // Generate checkout/payment URL for the order
+    const baseUrl = WOO_API_URL.replace('/wc/v3', '').replace('/wp-json', '');
+    const checkoutUrl = `${baseUrl}/checkout/order-${order.id}/pay/`;
+
     return new Response(JSON.stringify({
       success: true,
       orderId: order.id,
+      checkoutUrl: checkoutUrl,
+      url: checkoutUrl,
       message: 'Order created successfully'
     }), {
       headers: { 'Content-Type': 'application/json' },

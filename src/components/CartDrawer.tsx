@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { cartItems, isCartOpen, removeItem, updateQuantity, toggleCart } from '../store/cartStore';
 import { gsap } from 'gsap';
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+
+const WOO_CHECKOUT_URL = 'https://api.floravelleperfumes.com/checkout/';
 
 const CartDrawer: React.FC = () => {
   const $cartItems = useStore(cartItems);
@@ -10,10 +12,10 @@ const CartDrawer: React.FC = () => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     if ($isCartOpen) {
-      // Prevent scroll when cart is open
       document.body.style.overflow = 'hidden';
       
       const tl = gsap.timeline();
@@ -52,6 +54,65 @@ const CartDrawer: React.FC = () => {
   }, [$isCartOpen]);
 
   const subtotal = $cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const handleProceedToCheckout = async () => {
+    if ($cartItems.length === 0) return;
+
+    setIsSyncing(true);
+
+    try {
+      // First create order in WooCommerce via API
+      const orderData = {
+        line_items: $cartItems.map(item => ({
+          productId: item.id,
+          name: item.name,
+          quantity: item.quantity,
+          price: item.price.toString(),
+        })),
+        billing: {
+          firstName: 'Customer',
+          lastName: 'Name',
+          email: 'customer@example.com',
+          phone: '0000000000',
+          address: 'Address',
+          city: 'City',
+          postalCode: '00000',
+        },
+        shipping: {
+          firstName: 'Customer',
+          lastName: 'Name',
+          address: 'Address',
+          city: 'City',
+          postalCode: '00000',
+        },
+        paymentMethod: 'cod',
+      };
+
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+
+      if (result.success && result.orderId) {
+        // Clear cart and redirect to payment
+        window.location.href = `https://api.floravelleperfumes.com/checkout/order-${result.orderId}/pay/`;
+      } else {
+        // Fallback to regular checkout
+        const productIds = $cartItems.map(item => item.id).join(',');
+        const quantities = $cartItems.map(item => item.quantity).join(',');
+        window.location.href = `${WOO_CHECKOUT_URL}?add-to-cart=${productIds}&quantity=${quantities}`;
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      // Fallback
+      const productIds = $cartItems.map(item => item.id).join(',');
+      const quantities = $cartItems.map(item => item.quantity).join(',');
+      window.location.href = `${WOO_CHECKOUT_URL}?add-to-cart=${productIds}&quantity=${quantities}`;
+    }
+  };
 
   return (
     <>
@@ -160,8 +221,12 @@ const CartDrawer: React.FC = () => {
               <span className="text-xl font-heading">Rs. {subtotal.toLocaleString()}</span>
             </div>
             <p className="text-[10px] text-gray-500 italic text-center">Shipping and taxes calculated at checkout.</p>
-            <button className="w-full bg-[#3B2D20] text-white py-4 uppercase tracking-[0.3em] text-sm font-medium hover:bg-[#7A5633] transition-all duration-500 shadow-lg">
-              Proceed to Checkout
+            <button 
+              onClick={handleProceedToCheckout}
+              disabled={isSyncing}
+              className="w-full bg-[#3B2D20] text-white py-4 uppercase tracking-[0.3em] text-sm font-medium hover:bg-[#7A5633] transition-all duration-500 shadow-lg disabled:opacity-50"
+            >
+              {isSyncing ? 'Syncing...' : 'Proceed to Checkout'}
             </button>
           </div>
         )}

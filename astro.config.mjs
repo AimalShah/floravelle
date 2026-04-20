@@ -5,10 +5,17 @@ import lenis from "astro-lenis";
 
 export default defineConfig({
   image : {
-    domains : ["images.unsplash.com"], 
+    domains : ["images.unsplash.com", "floravelleperfumes.com", "api.floravelleperfumes.com"], 
   },
   vite: {
-    plugins: [tailwindcss()]
+    plugins: [tailwindcss()],
+    build: {
+      rollupOptions: {
+        output: {
+          manualChunks: undefined
+        }
+      }
+    }
   },
   integrations: [react(), lenis()],
 });

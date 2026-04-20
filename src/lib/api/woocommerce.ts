@@ -64,27 +64,36 @@ interface CustomerInfo {
 class Woocommerce {
   private api = apiClient;
   private cache = new Map<string, { data: any; expiry: number }>();
+  private cacheExpiry = 300000; // 5 minutes cache
 
   constructor() {}
 
-  // Get all products with caching
-  async getAllProducts(page = 1, perPage = 20): Promise<WooProduct[]> {
+  // Set custom cache expiry time (in milliseconds)
+  setCacheExpiry(ms: number): void {
+    this.cacheExpiry = ms;
+  }
+
+  // Get all products - no caching by default for fresh data
+  async getAllProducts(page = 1, perPage = 20, useCache = false): Promise<WooProduct[]> {
     const cacheKey = `products_${page}_${perPage}`;
     const now = Date.now();
     
-    // Check cache first (1 hour expiry)
-    if (this.cache.has(cacheKey) && this.cache.get(cacheKey)!.expiry > now) {
+    // Check cache only if useCache is true
+    if (useCache && this.cache.has(cacheKey) && this.cache.get(cacheKey)!.expiry > now) {
       return this.cache.get(cacheKey)!.data;
     }
 
     try {
+      // Fetch only published products
       const data = await this.api.get(`/products?per_page=${perPage}&page=${page}&status=publish`);
       
-      // Cache the result
-      this.cache.set(cacheKey, {
-        data,
-        expiry: now + 3600000 // 1 hour
-      });
+      // Cache the result only if useCache is true
+      if (useCache) {
+        this.cache.set(cacheKey, {
+          data,
+          expiry: now + this.cacheExpiry
+        });
+      }
 
       return data;
     } catch (error) {
@@ -153,28 +162,85 @@ class Woocommerce {
   clearCache(): void {
     this.cache.clear();
   }
+
+  // Force refresh - clear cache and get fresh data
+  async refreshProducts(page = 1, perPage = 20): Promise<WooProduct[]> {
+    this.clearCache();
+    return this.getAllProducts(page, perPage, false);
+  }
+}
+
+// Helper to strip HTML tags
+function stripHtml(html: string): string {
+  if (!html) return '';
+  return html.replace(/<[^>]*>/g, '').trim();
+}
+
+// Clean notes string - remove "Notes:" prefix etc
+function cleanNotes(note: string): string {
+  if (!note) return 'None';
+  // Remove common prefixes like "Notes:", "Top Notes:", etc.
+  return note.replace(/^(?:notes?\s*[:-]\s*)/i, '').trim();
+}
+
+// Extract notes from description HTML
+function extractNotesFromDescription(description: string): { top: string; heart: string; base: string } {
+  const cleanText = stripHtml(description);
+  
+  let top = "None";
+  let heart = "None";
+  let base = "None";
+
+  // Try to extract notes from description text patterns
+  // Common patterns: "Top: xxx", "Heart: xxx", "Base: xxx" or "Top Notes:", etc.
+  const topMatch = cleanText.match(/(?:top|top notes?)[:\s]+([^,\n]+(?:,\s*[^,\n]+)*?)(?=\s*(?:heart|base|s|$))/i);
+  const heartMatch = cleanText.match(/(?:heart|heart notes?)[:\s]+([^,\n]+(?:,\s*[^,\n]+)*?)(?=\s*(?:base|s|$))/i);
+  const baseMatch = cleanText.match(/(?:base|base notes?)[:\s]+([^,\n]+(?:,\s*[^,\n]+)*)/i);
+
+  if (topMatch) top = cleanNotes(topMatch[1]);
+  if (heartMatch) heart = cleanNotes(heartMatch[1]);
+  if (baseMatch) base = cleanNotes(baseMatch[1]);
+
+  return { top, heart, base };
+}
+
+// Get sale and regular price properly
+function getPrices(woo: WooProduct): { salePrice: string; regularPrice: string } {
+  const salePrice = woo.price || "";
+  const regularPrice = woo.regular_price || "2500";
+  
+  // If sale price exists and is different, use it
+  if (salePrice && salePrice !== regularPrice) {
+    return { salePrice, regularPrice };
+  }
+  return { salePrice: "", regularPrice };
 }
 
 // Data transformation functions
 export function mapProduct(woo: WooProduct) {
+  // Try attributes first, then fall back to description
+  const attributes = woo.attributes || [];
+  const topAttr = attributes.find((attr: any) => attr.name?.toLowerCase().includes('top'));
+  const heartAttr = attributes.find((attr: any) => attr.name?.toLowerCase().includes('heart'));
+  const baseAttr = attributes.find((attr: any) => attr.name?.toLowerCase().includes('base'));
+  
+  const extractedNotes = extractNotesFromDescription(woo.description || '');
+  const prices = getPrices(woo);
+  
   return {
     id: woo.id,
     name: woo.name,
-    price: woo.regular_price || "2,500",
-    description: woo.description,
-    images: woo.images.map(img => img.src),
+    salePrice: prices.salePrice,
+    regularPrice: prices.regularPrice,
+    description: stripHtml(woo.description || ''),
+    images: woo.images?.map((img: any) => img.src).filter(Boolean) || [],
     category: woo.category || "",
     notes: {
-      top: getAttribute(woo, "Top Notes") || "None",
-      heart: getAttribute(woo, "Heart Notes") || "None",
-      base: getAttribute(woo, "Base Notes") || "None"
+      top: topAttr?.options?.[0] || extractedNotes.top || "None",
+      heart: heartAttr?.options?.[0] || extractedNotes.heart || "None",
+      base: baseAttr?.options?.[0] || extractedNotes.base || "None"
     }
   };
-}
-
-function getAttribute(product: WooProduct, attributeName: string): string | null {
-  const attribute = product.attributes.find(attr => attr.name === attributeName);
-  return attribute ? attribute.options[0] : null;
 }
 
 export const woo = new Woocommerce()

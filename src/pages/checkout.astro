@@ -1,7 +1,6 @@
 ---
 import Layout from '../layouts/Layout.astro';
 import { Image } from 'astro:assets';
-import { cartItems, clearCart } from '../store/cartStore';
 ---
 
 <Layout 
@@ -18,21 +17,7 @@ import { cartItems, clearCart } from '../store/cartStore';
           <h2 class="text-2xl font-heading text-[#3B2D20] uppercase tracking-wider mb-8">Order Summary</h2>
           
           <div id="cart-items" class="space-y-6">
-            {cartItems.get().map((item) => (
-              <div class="flex gap-4 border-b border-[#A39579]/20 pb-6">
-                <div class="w-20 h-24 bg-[#E8E4DE] rounded-sm p-2 flex-shrink-0">
-                  <img src={item.image} alt={item.name} class="w-full h-full object-contain mix-blend-multiply" />
-                </div>
-                <div class="flex-1">
-                  <h3 class="text-lg font-heading text-[#3B2D20] uppercase">{item.name}</h3>
-                  <p class="text-sm text-[#A39579]">{item.subtitle}</p>
-                  <div class="flex justify-between items-center mt-2">
-                    <span class="text-sm">Qty: {item.quantity}</span>
-                    <span class="font-medium">Rs. {(item.price * item.quantity).toLocaleString()}</span>
-                  </div>
-                </div>
-              </div>
-            ))}
+            <!-- Cart items rendered by JS -->
           </div>
 
           <div class="border-t border-[#A39579]/30 mt-8 pt-8 space-y-4">
@@ -128,85 +113,80 @@ import { cartItems, clearCart } from '../store/cartStore';
 </Layout>
 
 <script>
-  import { cartItems, clearCart } from '../store/cartStore';
+  // Get cart from localStorage on load
+  let cartItemsList = [];
+  try {
+    const stored = localStorage.getItem('cart');
+    if (stored) {
+      cartItemsList = JSON.parse(stored);
+    }
+  } catch (e) {
+    console.error('Failed to load cart:', e);
+  }
 
   // Calculate totals
   function updateTotals() {
-    const items = cartItems.get();
-    const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    const subtotal = cartItemsList.reduce((acc: number, item: any) => acc + (item.price * item.quantity), 0);
     
-    document.getElementById('subtotal').textContent = `Rs. ${subtotal.toLocaleString()}`;
-    document.getElementById('total').textContent = `Rs. ${subtotal.toLocaleString()}`;
+    const subtotalEl = document.getElementById('subtotal');
+    const totalEl = document.getElementById('total');
+    if (subtotalEl) subtotalEl.textContent = `Rs. ${subtotal.toLocaleString()}`;
+    if (totalEl) totalEl.textContent = `Rs. ${subtotal.toLocaleString()}`;
   }
 
-  // Initialize totals
-  updateTotals();
-
-  // Handle form submission
-  document.getElementById('submit-order')?.addEventListener('click', async () => {
-    const form = document.getElementById('checkout-form') as HTMLFormElement;
-    if (!form.checkValidity()) {
-      form.reportValidity();
+  // Render cart items
+  function renderCartItems() {
+    const container = document.getElementById('cart-items');
+    if (!container) return;
+    
+    if (cartItemsList.length === 0) {
+      container.innerHTML = '<p class="text-center text-gray-500 py-8">Your cart is empty</p>';
       return;
     }
+    
+    container.innerHTML = cartItemsList.map((item: any) => `
+      <div class="flex gap-4 border-b border-[#A39579]/20 pb-6">
+        <div class="w-20 h-24 bg-[#E8E4DE] rounded-sm p-2 flex-shrink-0">
+          <img src="${item.image}" alt="${item.name}" class="w-full h-full object-contain mix-blend-multiply" />
+        </div>
+        <div class="flex-1">
+          <h3 class="text-lg font-heading text-[#3B2D20] uppercase">${item.name}</h3>
+          <p class="text-sm text-[#A39579]">${item.subtitle || ''}</p>
+          <div class="flex justify-between items-center mt-2">
+            <span class="text-sm">Qty: ${item.quantity}</span>
+            <span class="font-medium">Rs. ${(item.price * item.quantity).toLocaleString()}</span>
+          </div>
+        </div>
+      </div>
+    `).join('');
+  }
 
-    const formData = new FormData(form);
-    const items = cartItems.get();
+  renderCartItems();
+  updateTotals();
 
-    const orderData = {
-      line_items: items.map(item => ({
-        productId: item.id,
-        name: item.name,
-        quantity: item.quantity,
-        price: item.price.toString(),
-      })),
-      billing: {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        email: formData.get('email'),
-        phone: formData.get('phone'),
-        address: formData.get('address'),
-        city: formData.get('city'),
-        postalCode: formData.get('postalCode'),
-      },
-      shipping: {
-        firstName: formData.get('firstName'),
-        lastName: formData.get('lastName'),
-        address: formData.get('address'),
-        city: formData.get('city'),
-        postalCode: formData.get('postalCode'),
-      },
-      paymentMethod: 'cod',
-      customerNote: formData.get('customerNote'),
-    };
+  // Build checkout URL with cart items
+  const buildCheckoutUrl = () => {
+    if (cartItemsList.length === 0) return '';
+    
+    const productIds = cartItemsList.map((item: any) => item.id).join(',');
+    const quantities = cartItemsList.map((item: any) => item.quantity).join(',');
+    
+    // Add payment method query to force COD
+    return `https://api.floravelleperfumes.com/checkout/?add-to-cart=${productIds}&quantity=${quantities}&payment_method=cod`;
+  };
 
-    const submitBtn = document.getElementById('submit-order') as HTMLButtonElement;
-    submitBtn.disabled = true;
-    submitBtn.textContent = 'Processing...';
-
-    try {
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData),
-      });
-
-      const result = await response.json();
-
-      if (result.success) {
-        clearCart();
-        alert(`Order placed successfully! Order ID: ${result.orderId}`);
-        window.location.href = '/thank-you';
-      } else {
-        alert(`Error: ${result.error || 'Failed to place order'}`);
-        submitBtn.disabled = false;
-        submitBtn.textContent = 'Place Order';
-      }
-    } catch (error) {
-      console.error('Checkout error:', error);
-      alert('Failed to place order. Please try again.');
-      submitBtn.disabled = false;
-      submitBtn.textContent = 'Place Order';
+  // Redirect to WooCommerce checkout with cart
+  document.getElementById('submit-order')?.addEventListener('click', async () => {
+    const submitBtn = document.getElementById('submit-order');
+    if (submitBtn) {
+      submitBtn.disabled = true;
+      submitBtn.textContent = 'Syncing & Redirecting...';
+    }
+    
+    // Build and redirect
+    const checkoutUrl = buildCheckoutUrl();
+    if (checkoutUrl) {
+      window.location.href = checkoutUrl;
     }
   });
 </script>

@@ -1,16 +1,32 @@
 ---
-
+ 
 import "../styles/global.css"
 import {Image} from "astro:assets"
+import { woo, mapProduct } from "../lib/api/woocommerce";
 
 import icon from "../assets/icon.png"
 
-import manhaImg from "../assets/manha/manha-1.png"
-import shadowImg from "../assets/shadow/shadow-2.png"
-import odyessyImg from "../assets/odyssey/od-1.png"
-import {products} from "../utils/data.ts"
+let products = [];
+let fetchError = null;
 
-
+try {
+  const wooProducts = await woo.getAllProducts(1, 10);
+  products = wooProducts.map(p => {
+    const mapped = mapProduct(p);
+    const imgUrl = mapped.images?.[0];
+    return {
+      id: String(mapped.id),
+      name: mapped.name,
+      description: mapped.notes?.top || mapped.notes?.heart || 'Signature Collection',
+      src: imgUrl,
+      regularPrice: mapped.regularPrice,
+      salePrice: mapped.salePrice
+    };
+  });
+} catch (e) {
+  console.error('Failed to fetch products for perfumesSection:', e);
+  fetchError = e.message;
+}
 ---
 
 
@@ -48,6 +64,8 @@ import {products} from "../utils/data.ts"
               src={product.src}
               alt={product.name}
               class="w-full h-full object-cover group-hover:scale-110 transition-all duration-120"
+              width={500}
+              height={400}
             />
           </div>
           <div class="flex justify-between mt-4">
@@ -56,7 +74,7 @@ import {products} from "../utils/data.ts"
               <p class="text-gray-600 text-xs md:text-xl line-clamp-1">{product.description}</p>
             </div>
             <div class="flex items-center">
-              <a href={`/products/${product.name}`} class="text-xs md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] cursor-pointer hover:bg-[#7A5633] hover:text-white rounded-full px-4 py-2 whitespace-nowrap">View Details</a>
+              <a href={`/products/${product.id}`} class="text-xs md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] cursor-pointer hover:bg-[#7A5633] hover:text-white rounded-full px-4 py-2 whitespace-nowrap">View Details</a>
             </div>
           </div>
         </div> 
