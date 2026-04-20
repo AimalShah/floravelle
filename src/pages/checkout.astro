@@ -1,0 +1,212 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import { cartItems, clearCart } from '../store/cartStore';
+---
+
+<Layout 
+  title="Checkout | FloraVelle" 
+  description="Complete your purchase"
+>
+  <main class="min-h-screen bg-[#F0EBE5] py-16 md:py-32">
+    <div class="container mx-auto px-4 md:px-8">
+      <h1 class="text-4xl md:text-6xl font-heading text-[#3B2D20] uppercase tracking-widest mb-16 text-center">Checkout</h1>
+
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-16">
+        <!-- Order Summary -->
+        <div class="bg-white p-8 rounded-sm shadow-lg">
+          <h2 class="text-2xl font-heading text-[#3B2D20] uppercase tracking-wider mb-8">Order Summary</h2>
+          
+          <div id="cart-items" class="space-y-6">
+            {cartItems.get().map((item) => (
+              <div class="flex gap-4 border-b border-[#A39579]/20 pb-6">
+                <div class="w-20 h-24 bg-[#E8E4DE] rounded-sm p-2 flex-shrink-0">
+                  <img src={item.image} alt={item.name} class="w-full h-full object-contain mix-blend-multiply" />
+                </div>
+                <div class="flex-1">
+                  <h3 class="text-lg font-heading text-[#3B2D20] uppercase">{item.name}</h3>
+                  <p class="text-sm text-[#A39579]">{item.subtitle}</p>
+                  <div class="flex justify-between items-center mt-2">
+                    <span class="text-sm">Qty: {item.quantity}</span>
+                    <span class="font-medium">Rs. {(item.price * item.quantity).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+
+          <div class="border-t border-[#A39579]/30 mt-8 pt-8 space-y-4">
+            <div class="flex justify-between text-lg">
+              <span class="text-[#A39579] uppercase tracking-wider">Subtotal</span>
+              <span class="font-heading text-[#3B2D20]" id="subtotal">Rs. 0</span>
+            </div>
+            <div class="flex justify-between text-sm text-gray-500">
+              <span>Shipping</span>
+              <span>Calculated at next step</span>
+            </div>
+            <div class="flex justify-between text-xl font-heading pt-4 border-t border-[#A39579]/30">
+              <span class="uppercase tracking-wider">Total</span>
+              <span id="total">Rs. 0</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Checkout Form -->
+        <div class="space-y-8">
+          <!-- Customer Information Form -->
+          <div class="bg-white p-8 rounded-sm shadow-lg">
+            <h2 class="text-2xl font-heading text-[#3B2D20] uppercase tracking-wider mb-8">Customer Information</h2>
+            
+            <form id="checkout-form" class="space-y-6">
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">First Name *</label>
+                  <input type="text" name="firstName" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">Last Name *</label>
+                  <input type="text" name="lastName" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">Email *</label>
+                <input type="email" name="email" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">Phone *</label>
+                <input type="tel" name="phone" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+              </div>
+
+              <div>
+                <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">Address *</label>
+                <input type="text" name="address" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">City *</label>
+                  <input type="text" name="city" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+                </div>
+                <div>
+                  <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">Postal Code *</label>
+                  <input type="text" name="postalCode" required class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none" />
+                </div>
+              </div>
+
+              <div>
+                <label class="block text-sm uppercase tracking-wider text-[#A39579] mb-2">Order Notes (Optional)</label>
+                <textarea name="customerNote" rows="3" class="w-full px-4 py-3 border border-[#A39579]/30 rounded-sm focus:border-[#7A5633] focus:outline-none"></textarea>
+              </div>
+            </form>
+          </div>
+
+          <!-- Payment Method -->
+          <div class="bg-white p-8 rounded-sm shadow-lg">
+            <h2 class="text-2xl font-heading text-[#3B2D20] uppercase tracking-wider mb-8">Payment Method</h2>
+            
+            <div class="space-y-4">
+              <label class="flex items-center gap-4 p-4 border border-[#7A5633] rounded-sm cursor-pointer">
+                <input type="radio" name="paymentMethod" value="cod" checked class="w-5 h-5 text-[#7A5633]" />
+                <div>
+                  <span class="block font-medium text-[#3B2D20]">Cash on Delivery</span>
+                  <span class="text-sm text-gray-500">Pay when you receive your order</span>
+                </div>
+              </label>
+            </div>
+          </div>
+
+          <!-- Submit Button -->
+          <button id="submit-order" class="w-full bg-[#3B2D20] text-white py-4 uppercase tracking-[0.3em] text-sm font-medium hover:bg-[#7A5633] transition-all duration-500 shadow-lg disabled:opacity-50 disabled:cursor-not-allowed">
+            Place Order
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { cartItems, clearCart } from '../store/cartStore';
+
+  // Calculate totals
+  function updateTotals() {
+    const items = cartItems.get();
+    const subtotal = items.reduce((acc, item) => acc + (item.price * item.quantity), 0);
+    
+    document.getElementById('subtotal').textContent = `Rs. ${subtotal.toLocaleString()}`;
+    document.getElementById('total').textContent = `Rs. ${subtotal.toLocaleString()}`;
+  }
+
+  // Initialize totals
+  updateTotals();
+
+  // Handle form submission
+  document.getElementById('submit-order')?.addEventListener('click', async () => {
+    const form = document.getElementById('checkout-form') as HTMLFormElement;
+    if (!form.checkValidity()) {
+      form.reportValidity();
+      return;
+    }
+
+    const formData = new FormData(form);
+    const items = cartItems.get();
+
+    const orderData = {
+      line_items: items.map(item => ({
+        productId: item.id,
+        name: item.name,
+        quantity: item.quantity,
+        price: item.price.toString(),
+      })),
+      billing: {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        email: formData.get('email'),
+        phone: formData.get('phone'),
+        address: formData.get('address'),
+        city: formData.get('city'),
+        postalCode: formData.get('postalCode'),
+      },
+      shipping: {
+        firstName: formData.get('firstName'),
+        lastName: formData.get('lastName'),
+        address: formData.get('address'),
+        city: formData.get('city'),
+        postalCode: formData.get('postalCode'),
+      },
+      paymentMethod: 'cod',
+      customerNote: formData.get('customerNote'),
+    };
+
+    const submitBtn = document.getElementById('submit-order') as HTMLButtonElement;
+    submitBtn.disabled = true;
+    submitBtn.textContent = 'Processing...';
+
+    try {
+      const response = await fetch('/api/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(orderData),
+      });
+
+      const result = await response.json();
+
+      if (result.success) {
+        clearCart();
+        alert(`Order placed successfully! Order ID: ${result.orderId}`);
+        window.location.href = '/thank-you';
+      } else {
+        alert(`Error: ${result.error || 'Failed to place order'}`);
+        submitBtn.disabled = false;
+        submitBtn.textContent = 'Place Order';
+      }
+    } catch (error) {
+      console.error('Checkout error:', error);
+      alert('Failed to place order. Please try again.');
+      submitBtn.disabled = false;
+      submitBtn.textContent = 'Place Order';
+    }
+  });
+</script>

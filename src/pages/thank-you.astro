@@ -1,0 +1,30 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout 
+  title="Thank You | FloraVelle" 
+  description="Thank you for your order"
+>
+  <main class="min-h-screen bg-[#F0EBE5] flex items-center justify-center">
+    <div class="container mx-auto px-4 text-center py-32">
+      <div class="max-w-2xl mx-auto space-y-8">
+        <div class="w-24 h-24 bg-[#7A5633] rounded-full flex items-center justify-center mx-auto">
+          <svg class="w-12 h-12 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+          </svg>
+        </div>
+        
+        <h1 class="text-4xl md:text-6xl font-heading text-[#3B2D20] uppercase tracking-widest">Thank You</h1>
+        
+        <p class="text-xl text-gray-600">
+          Your order has been placed successfully. We will contact you shortly to confirm the details.
+        </p>
+        
+        <a href="/" class="inline-block px-8 py-3 bg-[#3B2D20] text-white hover:bg-[#7A5633] transition-all duration-500 uppercase tracking-widest text-sm font-medium">
+          Return to Homepage
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>
