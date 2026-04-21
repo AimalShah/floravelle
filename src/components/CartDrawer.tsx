@@ -61,56 +61,14 @@ const CartDrawer: React.FC = () => {
     setIsSyncing(true);
 
     try {
-      // First create order in WooCommerce via API
-      const orderData = {
-        line_items: $cartItems.map(item => ({
-          productId: item.id,
-          name: item.name,
-          quantity: item.quantity,
-          price: item.price.toString(),
-        })),
-        billing: {
-          firstName: 'Customer',
-          lastName: 'Name',
-          email: 'customer@example.com',
-          phone: '0000000000',
-          address: 'Address',
-          city: 'City',
-          postalCode: '00000',
-        },
-        shipping: {
-          firstName: 'Customer',
-          lastName: 'Name',
-          address: 'Address',
-          city: 'City',
-          postalCode: '00000',
-        },
-        paymentMethod: 'cod',
-      };
-
-      const response = await fetch('/api/checkout', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(orderData),
-      });
-
-      const result = await response.json();
-
-      if (result.success && result.orderId) {
-        // Clear cart and redirect to payment
-        window.location.href = `https://api.floravelleperfumes.com/checkout/order-${result.orderId}/pay/`;
-      } else {
-        // Fallback to regular checkout
-        const productIds = $cartItems.map(item => item.id).join(',');
-        const quantities = $cartItems.map(item => item.quantity).join(',');
-        window.location.href = `${WOO_CHECKOUT_URL}?add-to-cart=${productIds}&quantity=${quantities}`;
-      }
+      // Save cart to localStorage for checkout page to use
+      localStorage.setItem('cart', JSON.stringify($cartItems));
+      
+      // Redirect to local checkout page
+      window.location.href = '/checkout';
     } catch (error) {
       console.error('Checkout error:', error);
-      // Fallback
-      const productIds = $cartItems.map(item => item.id).join(',');
-      const quantities = $cartItems.map(item => item.quantity).join(',');
-      window.location.href = `${WOO_CHECKOUT_URL}?add-to-cart=${productIds}&quantity=${quantities}`;
+      window.location.href = '/checkout';
     }
   };
 

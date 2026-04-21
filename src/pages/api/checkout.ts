@@ -1,12 +1,15 @@
-import { woo, mapProduct } from '../../lib/api/woocommerce';
+import { woo } from '../../lib/api/woocommerce';
+import { loadEnv } from '../../utils/env.ts';
 
-const WOO_API_URL = process.env.WOO_API_URL || '';
+export const prerender = false;
+
+const env = loadEnv();
+const WOO_API_URL = env.WOO_API_URL || '';
 
 export async function POST({ request }) {
   try {
     const orderData = await request.json();
 
-    // Validate required fields
     const requiredFields = ['line_items', 'billing', 'shipping'];
     for (const field of requiredFields) {
       if (!orderData[field]) {
@@ -17,7 +20,6 @@ export async function POST({ request }) {
       }
     }
 
-    // Format order data for WooCommerce
     const wooOrderData = {
       line_items: orderData.line_items.map(item => ({
         product_id: item.productId,
@@ -48,10 +50,8 @@ export async function POST({ request }) {
       customer_note: orderData.customerNote || '',
     };
 
-    // Create order in WooCommerce
     const order = await woo.createOrder(wooOrderData);
 
-    // Generate checkout/payment URL for the order
     const baseUrl = WOO_API_URL.replace('/wc/v3', '').replace('/wp-json', '');
     const checkoutUrl = `${baseUrl}/checkout/order-${order.id}/pay/`;
 
@@ -69,7 +69,7 @@ export async function POST({ request }) {
     console.error('Checkout API Error:', error);
     return new Response(JSON.stringify({ 
       error: 'Failed to create order',
-      details: error.message 
+      details: (error as Error).message 
     }), {
       headers: { 'Content-Type': 'application/json' },
       status: 500,

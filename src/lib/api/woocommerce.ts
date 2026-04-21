@@ -143,6 +143,20 @@ class Woocommerce {
     }
   }
 
+  // Get payment gateways
+  async getPaymentGateways(): Promise<Array<{ id: string; title: string; description: string }>> {
+    try {
+      const data = await this.api.get('/payment_gateways');
+      return data.filter((gateway: any) => gateway.enabled === true);
+    } catch (error) {
+      if (error instanceof ApiError) {
+        console.error('WooCommerce API Error:', error.message);
+        throw error;
+      }
+      throw new Error('Failed to fetch payment gateways');
+    }
+  }
+
   // Get orders
   async getOrders(customerEmail?: string): Promise<WooOrder[]> {
     try {
