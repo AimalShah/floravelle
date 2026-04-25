@@ -102,11 +102,6 @@ try {
 </section>
 
 <style>
-    /* Import Swiper styles */
-    @import "swiper/css";
-    @import "swiper/css/navigation";
-    @import "swiper/css/pagination";
-
     .product-swiper {
         width: 100%;
         height: auto;
@@ -136,7 +131,10 @@ try {
     import Swiper from "swiper";
     import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-    document.addEventListener("DOMContentLoaded", () => {
+    function initSwiper() {
+        const swiperElement = document.querySelector(".product-swiper");
+        if (!swiperElement) return;
+
         const swiper = new Swiper(".product-swiper", {
             modules: [Navigation, Pagination, Autoplay],
             slidesPerView: 1.2,
@@ -158,5 +156,15 @@ try {
                 },
             },
         });
-    });
+    }
+
+    // Initialize on initial load
+    if (document.readyState === "loading") {
+        document.addEventListener("DOMContentLoaded", initSwiper);
+    } else {
+        initSwiper();
+    }
+
+    // Initialize on Astro page loads (for View Transitions)
+    document.addEventListener("astro:page-load", initSwiper);
 </script>

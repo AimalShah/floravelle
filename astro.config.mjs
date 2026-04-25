@@ -2,7 +2,7 @@ import { defineConfig } from 'astro/config';
 import tailwindcss from "@tailwindcss/vite"
 import react from "@astrojs/react";
 import lenis from "astro-lenis";
-import node from "@astrojs/node";
+import vercel from "@astrojs/vercel";
 
 export default defineConfig({
   output: 'server',
@@ -11,6 +11,9 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    ssr: {
+      noExternal: ['swiper', 'gsap']
+    },
     build: {
       rollupOptions: {
         output: {
@@ -20,5 +23,5 @@ export default defineConfig({
     }
   },
   integrations: [react(), lenis()],
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
 });

@@ -1,5 +1,6 @@
 ---
 import Header from "../components/header.astro"
+import "../styles/global.css"
 import TransparentHeader from "../components/transparent-header.astro"
 import Footer from "../components/footer.astro"
 import Preloader from "../components/Preloader.astro"
@@ -51,6 +52,7 @@ interface Props {
 		<meta property="twitter:description" content={description} />
 		<meta property="twitter:image" content={ogImage} />
 
+		<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
 		<link rel="canonical" href={canonicalURL} />
 		<script is:inline>
 			// Run immediately on page load before render
