@@ -1,4 +1,7 @@
 ---
+
+export const prerender = true
+
 import Layout from "../../layouts/Layout.astro";
 import "../../styles/global.css";
 import { Image } from "astro:assets";
@@ -8,6 +11,7 @@ import { woo, mapProduct } from "../../lib/api/woocommerce";
 export async function getStaticPaths() {
   try {
     const products = await woo.getAllProducts(1, 100);
+    console.log(products);
     return products.map((p) => ({
       params: { product: String(p.id) },
       props: { productData: mapProduct(p) },
@@ -41,14 +45,14 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
     </section>
   </Layout>
 ) : (
-<Layout 
-  title={`${productData.name} | FloraVelle`} 
+<Layout
+  title={`${productData.name} | FloraVelle`}
   description={productData.description}
   image={productData.images && productData.images[0]}
 >
   <section class="min-h-screen bg-[#F0EBE5] font-primary pt-40 pb-24 md:pt-48">
     <div class="container mx-auto px-6 md:px-12 max-w-[1400px]">
-      
+
       <!-- Back Link -->
       <a href="/collection" class="inline-flex items-center text-[#00000] hover:text-[#8A5633] transition-colors mb-12 uppercase tracking-[0.2em] text-xs font-medium reveal-section">
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-3" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -58,26 +62,26 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
       </a>
 
       <div class="flex flex-col lg:flex-row gap-16 lg:gap-32">
-        
+
         {/* Image Showcase (Left Side) */}
         <div class="w-full lg:w-[55%] flex flex-col gap-6 reveal-section">
           {/* Main Display */}
           <div class="w-full bg-[#E8E4DE] aspect-[4/5] flex items-center justify-center relative shadow-sm overflow-hidden p-8 md:p-20">
             <div class="w-full h-full overflow-hidden">
-              <img 
+              <img
                 id="main-product-image"
-                src={productData.images?.[0]} 
-                alt={`FLORAVELLE ${productData.name}`} 
+                src={productData.images?.[0]}
+                alt={`FLORAVELLE ${productData.name}`}
                 class="w-full h-full object-cover mix-blend-multiply drop-shadow-2xl transition-all duration-700 ease-in-out"
               />
             </div>
           </div>
-          
+
           {/* Thumbnails */}
           {productData.images && productData.images.length > 1 && (
             <div class="flex gap-4 overflow-x-auto py-4 scrollbar-hide">
               {productData.images.map((img, index) => (
-                <button 
+                <button
                   class={`thumbnail-btn flex-shrink-0 w-20 md:w-28 aspect-square bg-[#E8E4DE] ${index === 0 ? 'opacity-100' : 'opacity-60'} hover:opacity-100 transition-opacity duration-300 p-4 focus:outline-none`}
                   data-image-src={img}
                 >
@@ -90,7 +94,7 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
 
         {/* Product Information (Right Side) */}
         <div class="w-full lg:w-[45%] flex flex-col justify-center reveal-section pt-8 lg:pt-0">
-          
+
           <div class="mb-12">
             <p class="text-[#A39579] text-sm md:text-base uppercase tracking-[0.3em] font-medium mb-4">{productData.notes?.top || 'Signature Collection'}</p>
             <h1 class="text-5xl md:text-8xl font-heading text-[#3B2D20] capitalize leading-none mb-8">{productData.name}</h1>
@@ -105,9 +109,9 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
               )}
             </div>
           </div>
-          
+
           <div class="w-16 h-[1px] bg-[#A39579] mb-12"></div>
-          
+
           <p class="text-base md:text-xl text-gray-700 leading-relaxed mb-16 max-w-lg">
             {productData.description || 'A crafted essence for the modern identity.'}
           </p>
@@ -135,8 +139,8 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
           <div class="mt-auto space-y-4">
              <p class="text-[#A39579] tracking-[0.2em] font-medium uppercase text-xs mb-4">Purchase Options</p>
              <div class="flex flex-col  gap-4">
-                <AddToCartButton 
-                  client:load 
+                <AddToCartButton
+                  client:load
                   product={{
                     id: String(product),
                     name: productData.name,
@@ -146,9 +150,9 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
                   }}
                   className="w-full !py-5 !text-xl"
                 />
-                <a 
-                  href={whatsappUrl} 
-                  target="_blank" 
+                <a
+                  href={whatsappUrl}
+                  target="_blank"
                   rel="noopener noreferrer"
                   class="w-full inline-flex items-center justify-center gap-4 border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white py-5 px-8 text-base md:text-xl font-medium transition-colors duration-500 uppercase tracking-widest"
                 >
@@ -183,13 +187,13 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
             // Simple scale/fade effect
             mainImage.style.opacity = '0';
             mainImage.style.transform = 'scale(0.95)';
-            
+
             setTimeout(() => {
               mainImage.setAttribute('src', newSrc);
               mainImage.style.opacity = '1';
               mainImage.style.transform = 'scale(1)';
             }, 300);
-            
+
             // Update active state on buttons utilizing opacity instead of borders
             thumbnails.forEach(t => {
               t.classList.remove('opacity-100');
@@ -205,7 +209,7 @@ const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(mess
 
   // Run on first load
   setupGallery();
-  
+
   // Also run when navigating with Astro View Transitions (if enabled)
   document.addEventListener('astro:page-load', setupGallery);
 </script>
