@@ -1,38 +1,59 @@
 import { ApiError } from "../../utils/api-error.ts"
-import { config } from "dotenv";
-config()
-
-const USERNAME = process.env.WOO_CONSUMER_KEY;
-const PASSWORD = process.env.WOO_CONSUMER_SECRET;
-
-const encodedCredentials = btoa(`${USERNAME}:${PASSWORD}`)
+import { loadEnv } from "../../utils/env.ts"
 
 class ApiClinet {
-  private baseURL: string;
-  private basicHeaders: Record<string, string>;
+  private baseURL: string = '';
+  private basicHeaders: Record<string, string> = {
+    'Content-Type': 'application/json',
+  };
+  private initialized = false;
 
-  constructor(baseURL: string) {
-    this.baseURL = baseURL;
-    this.basicHeaders = {
-      'Authorization': `Basic ${encodedCredentials}`,
-      'Content-Type': 'application/json',
+  private initialize() {
+    if (this.initialized) return;
+    
+    const env = loadEnv();
+    const USERNAME = env.WOO_CONSUMER_KEY;
+    const PASSWORD = env.WOO_CONSUMER_SECRET;
+    
+    if (USERNAME && PASSWORD) {
+      const credentials = btoa(`${USERNAME}:${PASSWORD}`);
+      this.basicHeaders = {
+        'Authorization': `Basic ${credentials}`,
+        'Content-Type': 'application/json',
+      };
     }
+    
+    let url = env.WOO_API_URL || '';
+    url = url.replace(/\/+$/, '').replace(/\/+/g, '/');
+    this.baseURL = url;
+    this.initialized = true;
   }
 
   private async request<T>(
     endpoint: string,
     options: RequestInit = {}
   ): Promise<T> {
+    this.initialize();
+    
+    if (!this.baseURL) {
+      throw new ApiError('WOO_API_URL not configured', 500, {}, new Response(null, { status: 500 }));
+    }
+    
     const url = `${this.baseURL}${endpoint}`
     const config: RequestInit = {
       headers: { ...this.basicHeaders, ...options.headers },
       ...options
     }
 
-      const response = await fetch(url, config);
+    const response = await fetch(url, config);
 
     if (!response.ok) {
-      const errorData = await response.json().catch(() => { })
+      let errorData: any = {};
+      try {
+        errorData = await response.json();
+      } catch (e) {
+        errorData = { message: await response.text() };
+      }
 
       throw new ApiError(
         errorData.message || `HTTP ${response.status}: ${response.statusText}`,
@@ -58,5 +79,5 @@ class ApiClinet {
 
 }
 
-export const apiClient = new ApiClinet(process.env.WOO_API_URL);
+export const apiClient = new ApiClinet();
 

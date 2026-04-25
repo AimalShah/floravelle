@@ -1,128 +1,162 @@
 ---
+import "../styles/global.css";
+import { Image } from "astro:assets";
+import { woo, mapProduct } from "../lib/api/woocommerce";
 
-import "../styles/global.css"
-import {Image} from "astro:assets"
+import icon from "../assets/icon.png";
 
-import icon from "../assets/icon.png"
+let products = [];
+let fetchError = null;
 
-import manhaImg from "../assets/manha/manha-1.png"
-import shadowImg from "../assets/shadow/shadow-2.png"
-import odyessyImg from "../assets/odyssey/od-1.png"
-import {products} from "../utils/data.ts"
-
-
+try {
+    const wooProducts = await woo.getAllProducts(1, 10);
+    products = wooProducts.map((p) => {
+        const mapped = mapProduct(p);
+        const imgUrl = mapped.images?.[0];
+        return {
+            id: String(mapped.id),
+            name: mapped.name,
+            description:
+                mapped.notes?.top ||
+                mapped.notes?.heart ||
+                "Signature Collection",
+            src: imgUrl,
+            regularPrice: mapped.regularPrice,
+            salePrice: mapped.salePrice,
+        };
+    });
+} catch (e) {
+    console.error("Failed to fetch products for perfumesSection:", e);
+    fetchError = e.message;
+}
 ---
 
-
-<section id="products" class="reveal-section font-primary mt-16 md:mt-28 overflow-hidden">
-  <div class="container mx-auto flex flex-col md:flex-row px-4 md:px-0 gap-4 md:gap-0">
-    <div class="reveal-element">
-      <h1 class="text-3xl md:text-7xl mb-4 md:mb-8">Signature Scents</h1>
-      <p class="text-base md:text-2xl text-gray-600 md:px-2">Find the fragrance that feels uniquely yours and lingers beautifully wherever you go.</p>
+<section
+    id="products"
+    class="reveal-section font-primary mt-16 md:mt-28 overflow-hidden"
+>
+    <div
+        class="container mx-auto flex flex-col md:flex-row px-4 md:px-0 gap-4 md:gap-0"
+    >
+        <div class="reveal-element">
+            <h1 class="text-3xl md:text-7xl mb-4 md:mb-8">Signature Scents</h1>
+            <p class="text-base md:text-2xl text-gray-600 md:px-2">
+                Find the fragrance that feels uniquely yours and lingers
+                beautifully wherever you go.
+            </p>
+        </div>
+        <div
+            class="w-full md:flex hidden items-start md:items-end justify-start md:justify-end gap-2"
+        >
+            <button id="prev" class="cursor-pointer">
+                <Image src={icon} alt="arrow-left" class="" />
+            </button>
+            <button id="next" class="cursor-pointer">
+                <Image src={icon} alt="arrow-right" class="rotate-[180deg]" />
+            </button>
+        </div>
     </div>
-    <div class="w-full md:flex hidden items-start md:items-end justify-start md:justify-end gap-2">
-      <button id="prev" class="cursor-pointer">
-        <Image
-          src={icon}
-          alt="arrow-left"
-          class=""
-        />
-      </button>
-      <button id="next" class="cursor-pointer">
-        <Image
-          src={icon}
-          alt="arrow-right"
-          class="rotate-[180deg]"
-        />
-      </button>
-    </div>
-  </div>
 
-  <div class="mt-8 md:mt-12 container mx-auto px-4 md:px-0">
-    <div class="swiper product-swiper">
-      <div class="swiper-wrapper">
-        { products.map((product) => (
-        <div class="swiper-slide w-full md:w-[28rem] h-auto group">
-          <div class="w-full overflow-hidden h-[15rem] md:h-[25rem]">
-            <Image
-              src={product.src}
-              alt={product.name}
-              class="w-full h-full object-cover group-hover:scale-110 transition-all duration-120"
-            />
-          </div>
-          <div class="flex justify-between mt-4">
-            <div class='space-y-1 md:space-y-4'>
-              <h3 class="text-base md:text-2xl font-semibold capitalize leading-tight">{product.name}</h3>
-              <p class="text-gray-600 text-xs md:text-xl line-clamp-1">{product.description}</p>
+    <div class="mt-8 md:mt-12 container mx-auto px-4 md:px-0">
+        <div class="swiper product-swiper">
+            <div class="swiper-wrapper">
+                {
+                    products.map((product) => (
+                        <div class="swiper-slide w-full md:w-[28rem] h-auto group">
+                            <div class="w-full overflow-hidden h-[15rem] md:h-[25rem]">
+                                <Image
+                                    src={product.src}
+                                    alt={product.name}
+                                    class="w-full h-full object-cover group-hover:scale-110 transition-all duration-120"
+                                    width={500}
+                                    height={400}
+                                />
+                            </div>
+                            <div class="flex justify-between mt-4">
+                                <div class="space-y-1 md:space-y-4">
+                                    <h3 class="text-base md:text-2xl font-semibold capitalize leading-tight">
+                                        {product.name}
+                                    </h3>
+                                    <p class="text-gray-600 text-xs md:text-xl line-clamp-1">
+                                        {product.description}
+                                    </p>
+                                </div>
+                                <div class="flex items-center">
+                                    <a
+                                        href={`/products/${product.id}`}
+                                        class="text-xs md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] cursor-pointer hover:bg-[#7A5633] hover:text-white rounded-full px-4 py-2 whitespace-nowrap"
+                                    >
+                                        View Details
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    ))
+                }
             </div>
-            <div class="flex items-center">
-              <a href={`/products/${product.name}`} class="text-xs md:text-xl font-semibold border border-[#7A5633] text-[#8A5633] cursor-pointer hover:bg-[#7A5633] hover:text-white rounded-full px-4 py-2 whitespace-nowrap">View Details</a>
-            </div>
-          </div>
-        </div> 
-        ))}
-      </div>
+        </div>
     </div>
-  </div>
 
-  <div class="h-20 md:h-32"></div> <!-- Substantial padding for section separation -->
+    <div class="h-20 md:h-32"></div>
+    <!-- Substantial padding for section separation -->
 </section>
 
 <style>
-  /* Import Swiper styles */
-  @import 'swiper/css';
-  @import 'swiper/css/navigation';
-  @import 'swiper/css/pagination';
+    /* Import Swiper styles */
+    @import "swiper/css";
+    @import "swiper/css/navigation";
+    @import "swiper/css/pagination";
 
-  .product-swiper {
-    width: 100%;
-    height: auto;
-    overflow: visible !important; /* Allow slides to be visible when passing the container */
-  }
-  
-  .swiper-slide {
-    height: auto;
-    opacity: 0.4;
-    transition: opacity 0.3s ease;
-  }
-
-  .swiper-slide-active, .swiper-slide-next, .swiper-slide-next + .swiper-slide {
-    opacity: 1;
-  }
-
-  @media (min-width: 768px) {
-    .swiper-slide {
-      opacity: 1;
+    .product-swiper {
+        width: 100%;
+        height: auto;
+        overflow: visible !important; /* Allow slides to be visible when passing the container */
     }
-  }
+
+    .swiper-slide {
+        height: auto;
+        opacity: 0.4;
+        transition: opacity 0.3s ease;
+    }
+
+    .swiper-slide-active,
+    .swiper-slide-next,
+    .swiper-slide-next + .swiper-slide {
+        opacity: 1;
+    }
+
+    @media (min-width: 768px) {
+        .swiper-slide {
+            opacity: 1;
+        }
+    }
 </style>
 
 <script>
-import Swiper from 'swiper';
-import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+    import Swiper from "swiper";
+    import { Navigation, Pagination, Autoplay } from "swiper/modules";
 
-document.addEventListener("DOMContentLoaded", () => {
-  const swiper = new Swiper('.product-swiper', {
-    modules: [Navigation, Pagination, Autoplay],
-    slidesPerView: 1.2,
-    spaceBetween: 20,
-    centeredSlides: false,
-    loop: false,
-    navigation: {
-      nextEl: '#next',
-      prevEl: '#prev',
-    },
-    breakpoints: {
-      640: {
-        slidesPerView: 2.2,
-        spaceBetween: 30,
-      },
-      1024: {
-        slidesPerView: 3,
-        spaceBetween: 40,
-      },
-    },
-  });
-});
+    document.addEventListener("DOMContentLoaded", () => {
+        const swiper = new Swiper(".product-swiper", {
+            modules: [Navigation, Pagination, Autoplay],
+            slidesPerView: 1.2,
+            spaceBetween: 20,
+            centeredSlides: false,
+            loop: false,
+            navigation: {
+                nextEl: "#next",
+                prevEl: "#prev",
+            },
+            breakpoints: {
+                640: {
+                    slidesPerView: 2.2,
+                    spaceBetween: 30,
+                },
+                1024: {
+                    slidesPerView: 3,
+                    spaceBetween: 40,
+                },
+            },
+        });
+    });
 </script>
-

@@ -8,20 +8,22 @@ import CartDrawer from "../components/CartDrawer"
 import FloatingCart from "../components/FloatingCart"
 
 interface Props {
-	title?: string;
-	description?: string;
-	image?: string;
-	canonicalURL?: string;
-}
+ 	title?: string;
+ 	description?: string;
+ 	image?: string;
+ 	canonicalURL?: string;
+ }
 
-const { 
-	title = "FloraVelle | Elegance in Every Drop", 
-	description = "Experience the essence of luxury with FLORAVELLE. Handcrafted perfumes from Pakistan, featuring our signature scents collection.",
-	image = "/og-image.jpg", // Make sure this exists or use a default
-	canonicalURL = Astro.url.href
-} = Astro.props;
+ const { 
+ 	title = "FloraVelle | Elegance in Every Drop", 
+ 	description = "Experience the essence of luxury with FLORAVELLE. Handcrafted perfumes from Pakistan, featuring our signature scents collection.",
+ 	image = "/og-image.jpg",
+ 	canonicalURL = Astro.url.href
+ } = Astro.props;
 
-const isHome = Astro.url.pathname === "/";
+ const isHome = Astro.url.pathname === "/";
+
+ const ogImage = image?.startsWith('http') ? image : new URL(image, Astro.url).href;
 ---
 
 <!doctype html>
@@ -40,14 +42,14 @@ const isHome = Astro.url.pathname === "/";
 		<meta property="og:url" content={Astro.url} />
 		<meta property="og:title" content={title} />
 		<meta property="og:description" content={description} />
-		<meta property="og:image" content={new URL(image, Astro.url)} />
+		<meta property="og:image" content={ogImage} />
 
 		<!-- Twitter -->
 		<meta property="twitter:card" content="summary_large_image" />
 		<meta property="twitter:url" content={Astro.url} />
 		<meta property="twitter:title" content={title} />
 		<meta property="twitter:description" content={description} />
-		<meta property="twitter:image" content={new URL(image, Astro.url)} />
+		<meta property="twitter:image" content={ogImage} />
 
 		<link rel="canonical" href={canonicalURL} />
 		<script is:inline>

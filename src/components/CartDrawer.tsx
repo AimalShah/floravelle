@@ -1,8 +1,10 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useStore } from '@nanostores/react';
 import { cartItems, isCartOpen, removeItem, updateQuantity, toggleCart } from '../store/cartStore';
 import { gsap } from 'gsap';
 import { X, Minus, Plus, ShoppingBag, Trash2 } from 'lucide-react';
+
+const WOO_CHECKOUT_URL = 'https://api.floravelleperfumes.com/checkout/';
 
 const CartDrawer: React.FC = () => {
   const $cartItems = useStore(cartItems);
@@ -10,10 +12,10 @@ const CartDrawer: React.FC = () => {
   const drawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
   const contentRef = useRef<HTMLDivElement>(null);
+  const [isSyncing, setIsSyncing] = useState(false);
 
   useEffect(() => {
     if ($isCartOpen) {
-      // Prevent scroll when cart is open
       document.body.style.overflow = 'hidden';
       
       const tl = gsap.timeline();
@@ -52,6 +54,23 @@ const CartDrawer: React.FC = () => {
   }, [$isCartOpen]);
 
   const subtotal = $cartItems.reduce((acc, item) => acc + item.price * item.quantity, 0);
+
+  const handleProceedToCheckout = async () => {
+    if ($cartItems.length === 0) return;
+
+    setIsSyncing(true);
+
+    try {
+      // Save cart to localStorage for checkout page to use
+      localStorage.setItem('cart', JSON.stringify($cartItems));
+      
+      // Redirect to local checkout page
+      window.location.href = '/checkout';
+    } catch (error) {
+      console.error('Checkout error:', error);
+      window.location.href = '/checkout';
+    }
+  };
 
   return (
     <>
@@ -160,8 +179,12 @@ const CartDrawer: React.FC = () => {
               <span className="text-xl font-heading">Rs. {subtotal.toLocaleString()}</span>
             </div>
             <p className="text-[10px] text-gray-500 italic text-center">Shipping and taxes calculated at checkout.</p>
-            <button className="w-full bg-[#3B2D20] text-white py-4 uppercase tracking-[0.3em] text-sm font-medium hover:bg-[#7A5633] transition-all duration-500 shadow-lg">
-              Proceed to Checkout
+            <button 
+              onClick={handleProceedToCheckout}
+              disabled={isSyncing}
+              className="w-full bg-[#3B2D20] text-white py-4 uppercase tracking-[0.3em] text-sm font-medium hover:bg-[#7A5633] transition-all duration-500 shadow-lg disabled:opacity-50"
+            >
+              {isSyncing ? 'Syncing...' : 'Proceed to Checkout'}
             </button>
           </div>
         )}
