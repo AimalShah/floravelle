@@ -11,3 +11,11 @@
   --font-heading : "moonspace" ,serif;
   --font-roboto : "Roboto", sans-serif;
 }
+
+@utility scrollbar-hide {
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
