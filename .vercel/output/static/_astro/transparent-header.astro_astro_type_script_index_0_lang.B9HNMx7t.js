@@ -1,1 +1,0 @@
-import{g as t}from"./index.DDlvirwQ.js";const e=()=>{const o=document.querySelector(".t-header"),i=window.skipAnimations;t.to(o,{top:0,opacity:1,duration:i?0:1,ease:"none"})};window.addEventListener("preloaderComplete",()=>{e()});window.preloaderFinished||!document.getElementById("preloader")?e():setTimeout(()=>{window.preloaderFinished||e()},3e3);
