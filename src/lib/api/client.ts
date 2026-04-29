@@ -16,7 +16,7 @@ class ApiClinet {
     const PASSWORD = env.WOO_CONSUMER_SECRET;
     
     if (USERNAME && PASSWORD) {
-      const credentials = Buffer.from(`${USERNAME}:${PASSWORD}`).toString('base64');
+      const credentials = this.encodeBasicAuth(USERNAME, PASSWORD);
       this.basicHeaders = {
         'Authorization': `Basic ${credentials}`,
         'Content-Type': 'application/json',
@@ -35,6 +35,22 @@ class ApiClinet {
       this.baseURL = '';
     }
     this.initialized = true;
+  }
+
+  private encodeBasicAuth(username: string, password: string): string {
+    const raw = `${username}:${password}`;
+
+    // Node/serverless runtime
+    if (typeof Buffer !== 'undefined') {
+      return Buffer.from(raw).toString('base64');
+    }
+
+    // Edge/browser-compatible fallback
+    if (typeof btoa !== 'undefined') {
+      return btoa(raw);
+    }
+
+    throw new Error('No base64 encoder available in runtime');
   }
 
   private async request<T>(

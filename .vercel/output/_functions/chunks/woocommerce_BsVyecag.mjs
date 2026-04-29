@@ -17,7 +17,8 @@ class ApiError extends Error {
 let envCache = null;
 function loadEnv() {
   if (envCache) return envCache;
-  const env = { ...process.env };
+  const processEnv = typeof process !== "undefined" && process.env ? process.env : {};
+  const env = { ...processEnv };
   try {
     const envPath = join(process.cwd(), ".env");
     const file = readFileSync(envPath, "utf-8");
@@ -49,7 +50,7 @@ class ApiClinet {
     const USERNAME = env.WOO_CONSUMER_KEY;
     const PASSWORD = env.WOO_CONSUMER_SECRET;
     if (USERNAME && PASSWORD) {
-      const credentials = Buffer.from(`${USERNAME}:${PASSWORD}`).toString("base64");
+      const credentials = this.encodeBasicAuth(USERNAME, PASSWORD);
       this.basicHeaders = {
         "Authorization": `Basic ${credentials}`,
         "Content-Type": "application/json"
@@ -67,6 +68,16 @@ class ApiClinet {
       this.baseURL = "";
     }
     this.initialized = true;
+  }
+  encodeBasicAuth(username, password) {
+    const raw = `${username}:${password}`;
+    if (typeof Buffer !== "undefined") {
+      return Buffer.from(raw).toString("base64");
+    }
+    if (typeof btoa !== "undefined") {
+      return btoa(raw);
+    }
+    throw new Error("No base64 encoder available in runtime");
   }
   async request(endpoint, options = {}) {
     this.initialize();

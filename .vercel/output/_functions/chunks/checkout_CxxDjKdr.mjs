@@ -1,4 +1,4 @@
-import { w as woo, l as loadEnv } from './woocommerce_jWXobqlU.mjs';
+import { w as woo, l as loadEnv } from './woocommerce_BsVyecag.mjs';
 
 const prerender = false;
 const env = loadEnv();

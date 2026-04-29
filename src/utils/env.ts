@@ -6,8 +6,13 @@ let envCache: Record<string, string> | null = null;
 export function loadEnv() {
   if (envCache) return envCache;
   
-  // Start with process.env which is where Vercel injects variables
-  const env: Record<string, string> = { ...process.env as any };
+  // Start with process.env when available (Node runtime).
+  // In Edge runtimes, `process` may be undefined.
+  const processEnv =
+    typeof process !== 'undefined' && process.env
+      ? (process.env as Record<string, string>)
+      : {};
+  const env: Record<string, string> = { ...processEnv };
   
   try {
     const envPath = join(process.cwd(), '.env');

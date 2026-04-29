@@ -1,4 +1,4 @@
-import { w as woo } from './woocommerce_jWXobqlU.mjs';
+import { w as woo } from './woocommerce_BsVyecag.mjs';
 
 const prerender = false;
 async function GET() {
