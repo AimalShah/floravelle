@@ -1,12 +1,14 @@
 ---
 import "../styles/global.css"
 import heroBg from "../assets/hero-4.jpeg"
-import heroMobileBg from "../assets/hero-6.jpeg"
+import heroMobileBg from "../assets/hero-4.jpeg"
+import heroMobileBg2 from "../assets/hero-2.png"
+import heroMobileBg3 from "../assets/hero-3.png"
 import { Image } from "astro:assets"
 import CarouselCounter from "../components/carousel-counter.astro"
 ---
 
-<section id="hero" class="h-[100dvh] relative overflow-hidden bg-[#F0EBE5]">
+<section id="hero" class="relative overflow-hidden bg-[#F0EBE5] md:h-[100dvh]">
   <Image 
     src={heroBg} 
     alt="Floravelle Hero Desktop" 
@@ -14,17 +16,21 @@ import CarouselCounter from "../components/carousel-counter.astro"
     loading="eager"
     fetchpriority="high"
   />
-  <Image 
-    src={heroMobileBg} 
-    alt="Floravelle Hero Mobile" 
-    class="absolute inset-0 w-full h-full object-cover object-center z-0 block md:hidden"
-    loading="eager"
-    fetchpriority="high"
-  />
-  <div class="absolute inset-0 bg-black/20 z-0 block md:hidden"></div>
+  
+  <!-- Mobile Single Image (16:9) -->
+  <div class="block md:hidden w-full aspect-video relative z-0">
+    <Image 
+      src={heroMobileBg} 
+      alt="Floravelle Hero Mobile" 
+      class="w-full h-full object-cover object-center"
+      loading="eager"
+      fetchpriority="high"
+    />
+    <div class="absolute inset-0 bg-black/10"></div>
+  </div>
 
-  <div class="container h-full md:px-0 px-10 mx-auto text-white flex flex-col justify-center md:gap-12 font-heading pt-32 z-10 relative">
-    <div class="flex flex-1 md:flex-row flex-col justify-between w-full ">
+  <div class="container h-full md:px-0 px-10 mx-auto text-white hidden md:flex flex-col justify-center md:gap-12 font-heading pt-32 z-10 relative pointer-events-none">
+    <div class="flex flex-1 md:flex-row flex-col justify-between w-full pointer-events-auto">
       <div class="h-fit overflow-hidden flex items-center">
         <h1 class="md:text-[14rem] text-6xl translate-y-90 heading font-heading">Timeless</h1>
       </div>
