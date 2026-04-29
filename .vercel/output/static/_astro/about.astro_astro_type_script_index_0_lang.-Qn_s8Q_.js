@@ -1,0 +1,1 @@
+import{g as r}from"./index.DDlvirwQ.js";import{S as t}from"./ScrollTrigger.CB6UHAJl.js";r.registerPlugin(t);r.to(".parallax-bg",{yPercent:20,ease:"none",scrollTrigger:{trigger:".parallax-bg",start:"top top",end:"bottom top",scrub:!0}});

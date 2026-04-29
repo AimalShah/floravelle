@@ -1,0 +1,221 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { Image } from 'astro:assets';
+import AddToCartButton from '../components/AddToCartButton';
+import bannerImg from '../assets/banner-4.jpeg';
+import { woo, mapProduct } from '../lib/api/woocommerce';
+
+import '../styles/global.css';
+
+let products = [];
+let error = null;
+
+try {
+  const wooProducts = await woo.getAllProducts(1, 20);
+  products = wooProducts.map(p => mapProduct(p));
+} catch (e) {
+  console.error('Failed to fetch WooCommerce products:', e);
+  error = 'Unable to load products. Please try again later.';
+}
+---
+
+<Layout 
+  title="The Collection | FloraVelle" 
+  description="Explore our curated selection of signature scents. Each fragrance at FLORAVELLE is thoughtfully crafted to evoke deep emotion and leave a lasting impression."
+  >
+  <!-- Immersive Fullscreen Hero -->
+<section class="h-[100dvh] relative flex items-center justify-center overflow-hidden">
+  <div class="absolute inset-0 z-0">
+    <Image 
+       src={bannerImg} 
+       alt="Collection Atmosphere" 
+       class="w-full h-full object-cover object-[center_30%]"
+       loading="eager"
+       fetchpriority="high"
+       />
+       <div class="absolute inset-0 bg-black/40 backdrop-blur-[2px]"></div>
+  </div>
+
+  <div class="container mx-auto px-4 z-10 text-center space-y-8" id="collection-hero-text">
+    <h1 class="text-4xl md:text-[10rem] font-heading text-white tracking-widest uppercase leading-tight drop-shadow-2xl">The<br class="md:hidden"/> Collection</h1>
+    <div class="h-px w-24 md:w-32 bg-white/50 mx-auto"></div>
+    <p class="text-base md:text-2xl text-white/90 max-w-2xl mx-auto font-roboto tracking-widest leading-relaxed uppercase">
+    Signature Essences crafted for the modern identity
+    </p>
+  </div>
+
+  <!-- Scroll Indicator -->
+  <div class="absolute bottom-12 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-4 text-white/50">
+    <span class="text-xs tracking-[0.3em] uppercase">Scroll to Explore</span>
+    <div class="w-px h-12 bg-gradient-to-b from-white/50 to-transparent"></div>
+  </div>
+</section>
+
+<!-- Products Grid (Alternating Layout) -->
+{error ? (
+<div class="container mx-auto px-4 py-16 md:py-32 text-center">
+  <p class="text-[#7A5633] text-xl">{error}</p>
+  <button onclick="window.location.reload()" class="mt-4 px-8 py-3 border border-[#7A5633] text-[#7A5633] hover:bg-[#7A5633] hover:text-white transition-all duration-500 uppercase tracking-widest text-sm font-medium">
+    Try Again
+  </button>
+</div>
+) : (
+<div class="container mx-auto px-4 md:px-8 py-16 md:py-32 space-y-24 md:space-y-48">
+  {products.map((product, index) => {
+  const isEven = index % 2 !== 0;
+  const productImages = product.images;
+
+
+  return (
+  <section class="reveal-section flex flex-col md:flex-row items-center gap-12 md:gap-24 group">
+
+    {/* Image Carousel Block */}
+    <div class={`w-full md:w-1/2 overflow-hidden bg-[#E8E4DE] rounded-sm relative aspect-[4/5] ${isEven ? 'md:order-2' : 'md:order-1'} reveal-element`}>
+      <div class={`product-gallery-${product.id} w-full h-full swiper`}>
+        <div class="swiper-wrapper">
+          {product.images?.map((img, i) => (
+            <div class="swiper-slide flex items-center justify-center p-4 md:p-8">
+              <img 
+                src={img} 
+                alt={`${product.name} - ${i + 1}`}
+                class="w-full h-full object-contain"
+                loading="lazy"
+              />
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Carousel Controls */}
+      {product.images && product.images.length > 1 && (
+        <div class="absolute  bottom-4 left-1/2 w-full -translate-x-1/2 z-40 flex flex-row justify-between items-center gap-4 z-10">
+          <button class={`gallery-prev-${product.id} w-8 h-8 flex justify-center items-center text-xl text-[#7A5633] hover:bg-[#7A5633] hover:text-white rounded-full transition-colors z-40`}>
+            ←
+          </button>
+          <div class="swiper-pagination"></div>
+          <button class={`gallery-next-${product.id} w-8 h-8 flex justify-center items-center text-xl text-[#7A5633] hover:bg-[#7A5633] hover:text-white rounded-full transition-colors z-40`}>
+            →
+          </button>
+        </div>
+      )}
+    </div>
+
+    {/* Text/Details Block */}
+    <div class={`w-full md:w-1/2 font-primary flex flex-col justify-center space-y-8 ${isEven ? 'md:order-1' : 'md:order-2'} reveal-element`}>
+      <div>
+        <p class="text-[#A39579] tracking-[0.2em] text-sm md:text-base uppercase mb-2 reveal-element">{product.notes?.top || 'Signature Collection'}</p>
+        <h2 class="text-4xl md:text-7xl font-heading text-[#3B2D20] capitalize reveal-element">{product.name}</h2>
+      </div>
+
+      <p class="text-base md:text-xl text-gray-700 leading-relaxed max-w-xl reveal-element">
+      {product.description || 'A crafted essence for the modern identity.'}
+      </p>
+
+      {/* Fragrance Notes */}
+      <div class="space-y-3 pt-6 border-t border-[#A39579]/30 max-w-md reveal-element">
+        <div class="flex justify-between text-sm md:text-base">
+          <span class="text-[#A39579] uppercase tracking-wider w-24">Top</span>
+          <span class="text-gray-800 flex-1 text-right">{product.notes?.top || 'N/A'}</span>
+        </div>
+        <div class="flex justify-between text-sm md:text-base">
+          <span class="text-[#A39579] uppercase tracking-wider w-24">Heart</span>
+          <span class="text-gray-800 flex-1 text-right">{product.notes?.heart || 'N/A'}</span>
+        </div>
+        <div class="flex justify-between text-sm md:text-base">
+          <span class="text-[#A39579] uppercase tracking-wider w-24">Base</span>
+          <span class="text-gray-800 flex-1 text-right">{product.notes?.base || 'N/A'}</span>
+        </div>
+      </div>
+
+      <div class="pt-8 flex flex-wrap flex-col md:flex-row items-center gap-6 reveal-element">
+        <div class="flex items-center gap-2">
+          {product.salePrice ? (
+          <>
+          <span class="text-xl text-gray-400 line-through">Rs. {parseInt(product.regularPrice) || 2500}</span>
+          <span class="text-2xl md:text-3xl text-[#7A5633]">Rs. {parseInt(product.salePrice) || 2500}</span>
+          </>
+          ) : (
+          <span class="text-2xl md:text-3xl text-[#3B2D20]">Rs. {parseInt(product.regularPrice) || 2500}</span>
+          )}
+        </div>
+        <div class="flex flex-col md:flex-row items-center gap-4">
+          <AddToCartButton 
+             client:load 
+             product={{
+             id: String(product.id),
+             name: product.name,
+             price: parseInt(product.salePrice || product.regularPrice) || 2500,
+             image: productImages,
+             subtitle: product.notes?.top || 'Signature Collection'
+             }} 
+             />
+             <a href={`/products/${product.id}`} class="inline-block text-sm font-semibold border border-[#7A5633] text-[#8A5633] hover:bg-[#7A5633] hover:text-white rounded-full px-8 py-3 transition-colors duration-300 shadow-sm uppercase tracking-widest">
+               Discover
+             </a>
+        </div>
+      </div>
+    </div>
+  </section>
+  );
+  })}
+</div>
+)}
+</Layout>
+
+<script>
+  import { gsap } from "gsap";
+  import Swiper from 'swiper';
+  import { Navigation, Pagination } from 'swiper/modules';
+
+  // Simple custom entrance for the Collection Hero
+  const animateHero = () => {
+    gsap.to('#collection-hero-text', {
+      y: 0,
+      opacity: 1,
+      duration: 1.5,
+      ease: "power3.out",
+    });
+  };
+
+  // Sync with preloader just like the main homepage hero
+  window.addEventListener('preloaderComplete', animateHero);
+
+  // Fallback in case preloader is missing (hot reloads)
+  setTimeout(() => {
+    const preloader = document.getElementById('preloader');
+    if (!preloader) {
+      animateHero();
+    }
+  }, 1000);
+
+  // Initialize Swiper when DOM is ready
+  const initSwipers = () => {
+    document.querySelectorAll('[class^="product-gallery-"]').forEach(galleryEl => {
+      const slides = galleryEl.querySelectorAll('.swiper-slide');
+      const productId = galleryEl.classList[0].replace('product-gallery-', '');
+      const container = galleryEl;
+      const parent = container.parentElement;
+      
+      if (slides.length > 1 && parent) {
+        new Swiper(container, {
+          modules: [Navigation, Pagination],
+          slidesPerView: 1,
+          spaceBetween: 0,
+          loop: true,
+          navigation: {
+            nextEl: parent.querySelector(`.gallery-next-${productId}`),
+            prevEl: parent.querySelector(`.gallery-prev-${productId}`),
+          },
+          pagination: {
+            el: parent.querySelector('.swiper-pagination'),
+            clickable: true,
+          },
+          speed: 600,
+        });
+      }
+    });
+  };
+
+  document.addEventListener('DOMContentLoaded', initSwipers);
+  document.addEventListener('astro:page-load', initSwipers);
+</script>

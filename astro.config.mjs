@@ -3,6 +3,7 @@ import tailwindcss from "@tailwindcss/vite"
 import react from "@astrojs/react";
 import lenis from "astro-lenis";
 import vercel from "@astrojs/vercel";
+import { fileURLToPath } from "node:url";
 
 export default defineConfig({
   output: 'server',
@@ -11,6 +12,16 @@ export default defineConfig({
   },
   vite: {
     plugins: [tailwindcss()],
+    resolve: {
+      alias: {
+        "react-dom/client": fileURLToPath(
+          new URL("./src/shims/react-dom-client.ts", import.meta.url)
+        )
+      }
+    },
+    optimizeDeps: {
+      force: true
+    },
     ssr: {
       noExternal: ['swiper', 'gsap']
     },

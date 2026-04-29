@@ -7,7 +7,7 @@ import CartButton from "./CartButton"
 const { isHome = false } = Astro.props;
 ---
 
-<header id="site-header" class={`md:py-4 py-3 md:fixed ${isHome ? 'fixed' : 'sticky'} top-0 left-0 w-full z-50 bg-[#F0EBE5] transition-all duration-500 shadow-sm ${isHome ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'}`}>
+<header id="site-header" data-is-home={isHome} class={`md:py-4 py-3 md:fixed ${isHome ? 'fixed' : 'sticky'} top-0 left-0 w-full z-50 bg-[#F0EBE5] transition-all duration-500 shadow-sm ${isHome ? 'opacity-0 -translate-y-full' : 'opacity-100 translate-y-0'}`}>
   <div class="container mx-auto px-6 md:px-12">
     <div class="flex items-center justify-between">
       
@@ -56,7 +56,7 @@ const { isHome = false } = Astro.props;
   </div>
 </header>
 
-<script define:vars={{ isHome }}>
+<script>
 import {gsap} from "gsap";
 import {ScrollTrigger} from "gsap/ScrollTrigger"
 
@@ -64,12 +64,13 @@ gsap.registerPlugin(ScrollTrigger);
 
 
 const headerScroll = () => {
-  if (!isHome) return;
+  const header = document.getElementById("site-header");
+  const isHome = header?.dataset.isHome === "true";
+  if (!isHome || !header) return;
 
-const header = document.getElementById("site-header");
 const hero = document.getElementById("hero");
 
-if(!header || !hero) return;
+if(!hero) return;
 
   gsap.set(header, {y: -100,opacity : 0});
   
