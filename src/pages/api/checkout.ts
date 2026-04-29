@@ -35,7 +35,7 @@ export async function POST({ request }) {
         address_1: orderData.billing.address,
         city: orderData.billing.city,
         postcode: orderData.billing.postalCode,
-        country: orderData.billing.country || 'IN',
+        country: orderData.billing.country || 'PK',
       },
       shipping: {
         first_name: orderData.shipping.firstName,
@@ -43,7 +43,7 @@ export async function POST({ request }) {
         address_1: orderData.shipping.address,
         city: orderData.shipping.city,
         postcode: orderData.shipping.postalCode,
-        country: orderData.shipping.country || 'IN',
+        country: orderData.shipping.country || 'PK',
       },
       payment_method: orderData.paymentMethod,
       payment_method_title: orderData.paymentMethod === 'cod' ? 'Cash on Delivery' : orderData.paymentMethod,
