@@ -16,16 +16,24 @@ class ApiClinet {
     const PASSWORD = env.WOO_CONSUMER_SECRET;
     
     if (USERNAME && PASSWORD) {
-      const credentials = btoa(`${USERNAME}:${PASSWORD}`);
+      const credentials = Buffer.from(`${USERNAME}:${PASSWORD}`).toString('base64');
       this.basicHeaders = {
         'Authorization': `Basic ${credentials}`,
         'Content-Type': 'application/json',
       };
     }
     
-    let url = env.WOO_API_URL || '';
-    url = url.replace(/\/+$/, '').replace(/\/+/g, '/');
-    this.baseURL = url;
+    const rawUrl = (env.WOO_API_URL || '').trim();
+    if (rawUrl) {
+      try {
+        const parsed = new URL(rawUrl);
+        this.baseURL = parsed.toString().replace(/\/+$/, '');
+      } catch {
+        this.baseURL = rawUrl.replace(/\/+$/, '');
+      }
+    } else {
+      this.baseURL = '';
+    }
     this.initialized = true;
   }
 

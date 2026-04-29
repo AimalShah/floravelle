@@ -205,6 +205,7 @@ export const prerender = false;
       address: formData.get('address'),
       city: formData.get('city'),
       postalCode: formData.get('postalCode'),
+      country: 'PK',
     };
 
     const paymentMethodEl = document.querySelector('input[name="paymentMethod"]:checked') as HTMLInputElement;

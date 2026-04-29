@@ -1,5 +1,5 @@
-import { c as createComponent, $ as $$Image } from './_astro_assets_CRHewp0w.mjs';
-import { d as createRenderInstruction, m as maybeRenderHead, c as addAttribute, r as renderComponent, b as renderTemplate, e as renderSlot, f as renderHead } from './entrypoint_t5NlVTDC.mjs';
+import { c as createComponent, $ as $$Image } from './_astro_assets_BXAHeRFh.mjs';
+import { d as createRenderInstruction, m as maybeRenderHead, c as addAttribute, r as renderComponent, b as renderTemplate, e as renderSlot, f as renderHead } from './entrypoint_ljW-6php.mjs';
 import { jsxs, jsx, Fragment } from 'react/jsx-runtime';
 import { useRef, useState, useEffect } from 'react';
 import { useStore } from '@nanostores/react';

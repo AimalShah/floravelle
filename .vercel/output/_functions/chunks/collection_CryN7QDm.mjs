@@ -1,12 +1,12 @@
-import { c as createComponent, $ as $$Image } from './_astro_assets_CRHewp0w.mjs';
-import { r as renderComponent, b as renderTemplate, m as maybeRenderHead, c as addAttribute, F as Fragment } from './entrypoint_t5NlVTDC.mjs';
-import { $ as $$Layout, r as renderScript } from './Layout_D2SQUOUd.mjs';
+import { c as createComponent, $ as $$Image } from './_astro_assets_BXAHeRFh.mjs';
+import { r as renderComponent, b as renderTemplate, m as maybeRenderHead, c as addAttribute, F as Fragment } from './entrypoint_ljW-6php.mjs';
+import { $ as $$Layout, r as renderScript } from './Layout_BdV_vE1X.mjs';
 import { jsxs, jsx } from 'react/jsx-runtime';
 import 'react';
 import { a as addItem } from './cartStore_qkDqCX4c.mjs';
 import { ShoppingBag } from 'lucide-react';
 import { b as bannerImg } from './banner-4_DqR_qgZ1.mjs';
-import { w as woo, m as mapProduct } from './woocommerce_z6w-GuTX.mjs';
+import { w as woo, m as mapProduct } from './woocommerce_jWXobqlU.mjs';
 
 const AddToCartButton = ({ product, className = "" }) => {
   return /* @__PURE__ */ jsxs(

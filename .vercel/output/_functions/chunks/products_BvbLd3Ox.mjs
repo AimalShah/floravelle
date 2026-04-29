@@ -1,4 +1,4 @@
-import { w as woo, m as mapProduct } from './woocommerce_z6w-GuTX.mjs';
+import { w as woo, m as mapProduct } from './woocommerce_jWXobqlU.mjs';
 
 async function GET({ request }) {
   try {
